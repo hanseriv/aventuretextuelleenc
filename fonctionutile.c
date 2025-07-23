@@ -4,8 +4,6 @@
 
 void free_liste_char(list_char phrase){
     free(phrase.content);
-
-
 }
 
 void free_liste_string(list_string *matrice){
@@ -23,6 +21,20 @@ void free_liste_string(list_string *matrice){
         longueur --;
     }
     free(matrice);
+}
+
+int is_the_char_the_same(list_char phrase1, list_char phrase2){
+    if (phrase1.len != phrase2.len){
+        return 0;
+    }
+    unsigned int compteur = 0;
+    while(compteur <= phrase1.len){
+        if (phrase1.content[compteur] != phrase2.content[compteur]){
+            return 0;
+        }
+        compteur ++;
+    }
+    return 1;
 }
 
 
@@ -49,7 +61,7 @@ list_char append_charptr(list_char phrase, char *aajouter){
     */
     unsigned int longueur = len_string(aajouter);
     unsigned int compteur = 0;
-    while(compteur < longueur ){
+    while(compteur <= longueur ){
         phrase = append_char(phrase,aajouter[compteur]);
         compteur ++;
     }
@@ -66,10 +78,20 @@ list_char init_list_char(list_char phrase, char *acopie){
     */
     unsigned int longueur = len_string(acopie);
     phrase.len = longueur;
-    free(phrase.content);
     phrase.content = malloc((longueur + 1)*sizeof(char));
     copieur_str(phrase.content,acopie);
     return phrase;
+}
+
+
+list_char append_stringchar(list_char aretourner, list_char aajouter){
+    aretourner.len += aajouter.len;
+    unsigned int compteur = 0;
+    while(compteur <= aajouter.len){
+        aretourner = append_char(aretourner,aajouter.content[compteur]);
+        compteur ++;
+    }
+    return aretourner;
 }
 
 
@@ -78,7 +100,7 @@ list_string append_str(list_string matrice, list_char phrase){
     matrice.len++;
     matrice.content = realloc(matrice.content, (matrice.len) * sizeof(list_char*)); // on augmente la taille alloué a la matrice
 
-    matrice.content[matrice.len - 1 ] =  append_charptr(matrice.content[matrice.len - 1 ], phrase.content);
+    matrice.content[matrice.len - 1 ] =  append_stringchar(matrice.content[matrice.len - 1 ], phrase);
 
 
     return matrice;
@@ -108,22 +130,26 @@ void copieur_str(char * tocopie, char * a_copier){
 }
 
 
-char **stringtoliste( char* str){
-
+list_string stringtoliste(list_char phrase){
     list_char mot;
-    mot.len = 0;
-
-    list_string phrase;
-    phrase.len = 0;
-
-
+    mot.content = malloc(sizeof(char));
+    list_string matrice_a_retourner;
+    matrice_a_retourner.content = malloc(sizeof(list_char*));
     unsigned int compteur = 0;
-
-    while(str[compteur] != '\0'){
-        if(str[compteur] != ' '){
-            //mot = '1';
+    while(compteur <= phrase.len)
+    {
+        if (phrase.content[compteur] != ' ')
+        {
+            mot = append_char(mot,phrase.content[compteur]);
         }
+        else{
+            matrice_a_retourner = append_str(matrice_a_retourner, mot);
+            mot.len = 0;
+        }
+        compteur++;
     }
-
-
+    matrice_a_retourner = append_str(matrice_a_retourner,mot);
+    free_liste_char(mot);
+    return matrice_a_retourner;
 }
+

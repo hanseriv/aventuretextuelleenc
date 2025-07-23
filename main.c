@@ -12,15 +12,23 @@ const int SCREEN_HEIGHT = 800;
 int main()
 {
     list_char jean1;
-    list_char *hanspoint = &jean1;
-    jean1 = append_charptr(jean1,"hello world" );
+    if (0){
+        printf("hello sale con \n");
+    }
+    if(1){
+        printf("enrevoir \n");
+    }
+
+    jean1 = append_charptr(jean1,"hello world je ne comprend pas" );
+
     printf("l'addresse precedente etait %s1\n",  jean1.content);
-    jean1 = append_charptr(jean1," hello world" );
-    printf("l'addresse precedente etait %s1\n",  jean1.content);
-    jean1 = init_list_char(jean1,"hi everyone");
-    printf("l'addresse precedente etait %s1\n",  jean1.content);
-    free_liste_char(jean1);
-    printf("l'addresse precedente etait %p1\n",  jean1.content);
+    
+    list_string jean2 = stringtoliste(jean1);
+    unsigned int compteur = 0;
+    while (compteur <= jean2.len){
+        printf("%s \n", jean2.content[compteur]);
+        compteur ++;
+    } 
 
     /*
     //The window we'll be rendering to
