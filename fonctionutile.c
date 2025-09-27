@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include "fonctionutile.h"
 
-void free_liste_char(list_char phrase){
-    free(phrase.content);
+void free_liste_char(list_char *phrase){
+    free(phrase->content);
 }
 
 void free_liste_string(list_string *matrice){
@@ -17,7 +17,7 @@ void free_liste_string(list_string *matrice){
     list_char pointer_buffer;
     while (longueur != 0){
         pointer_buffer =  matrice->content[longueur -1] ;
-        free_liste_char(pointer_buffer);
+        free_liste_char(&pointer_buffer);
         longueur --;
     }
     free(matrice);
@@ -38,21 +38,20 @@ int is_the_char_the_same(list_char phrase1, list_char phrase2){
 }
 
 
-list_char append_char(list_char phrase, char letter){
+void append_char(list_char *phrase, char letter){
     /*
         entrée : list_char phrase, et char lettre
         sortie : list_phrase
         le but de cette fonction est de réattribuer un pointeur
         pour pouvoir rajouter le caractère letter a la fin de la phrase
     */
-    phrase.content = realloc(phrase.content, (phrase.len + 2) * sizeof(char)); // on augmente la taille alloué a la liste
-    phrase.content[phrase.len] = letter; // on ajoute le nouveau contenu
-    phrase.content[phrase.len+1] = '\0'; // sans oublié l'arreteur de string
-    phrase.len++; // on augmente la taille
-    return phrase; // on return la nouvelle structure
+    phrase->len++; /*on augmente la taille*/ 
+    phrase->content = realloc(phrase->content, (phrase->len ) * sizeof(char)); /*on augmente la taille alloué a la liste*/ 
+    phrase->content[phrase->len -1] = letter; /*on ajoute le nouveau contenu*/ 
+    
 }
 
-list_char append_charptr(list_char phrase, char *aajouter){
+void append_charptr(list_char *phrase, char *aajouter){
     /*
         entrée : list_char phrase, et char *aajouter
         sortie : phrase
@@ -62,48 +61,43 @@ list_char append_charptr(list_char phrase, char *aajouter){
     unsigned int longueur = len_string(aajouter);
     unsigned int compteur = 0;
     while(compteur <= longueur ){
-        phrase = append_char(phrase,aajouter[compteur]);
+        append_char(phrase,aajouter[compteur]);
         compteur ++;
     }
-    return phrase;
+    append_char(phrase,'\0');
 }
 
 
 
-list_char init_list_char(list_char phrase, char *acopie){
+void init_list_char(list_char *phrase, char *acopie){
     /*
         entrée : list_char phrase, et pointeur de char acopie
         sortie : list_char phrase
         le but de cette fonction est de copier une phrase et d'initialiser une string dans content de la list_char
     */
     unsigned int longueur = len_string(acopie);
-    phrase.len = longueur;
-    phrase.content = malloc((longueur + 1)*sizeof(char));
-    copieur_str(phrase.content,acopie);
-    return phrase;
+    phrase->len = longueur;
+    phrase->content = malloc((longueur + 1)*sizeof(char));
+    copieur_str(phrase->content,acopie);
 }
 
 
-list_char append_stringchar(list_char aretourner, list_char aajouter){
-    aretourner.len += aajouter.len;
+void append_stringchar(list_char *aretourner, list_char *aajouter){
+    aretourner->len += aajouter->len;
     unsigned int compteur = 0;
-    while(compteur <= aajouter.len){
-        aretourner = append_char(aretourner,aajouter.content[compteur]);
+    while(compteur <= aajouter->len){
+        append_char(aretourner,aajouter->content[compteur]);
         compteur ++;
     }
-    return aretourner;
 }
 
 
-list_string append_str(list_string matrice, list_char phrase){
+void append_str(list_string *matrice, list_char *phrase){
 
-    matrice.len++;
-    matrice.content = realloc(matrice.content, (matrice.len) * sizeof(list_char*)); // on augmente la taille alloué a la matrice
+    matrice->len++;
+    matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char*));  
+    append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
 
-    matrice.content[matrice.len - 1 ] =  append_stringchar(matrice.content[matrice.len - 1 ], phrase);
-
-
-    return matrice;
 }
 
 
@@ -130,26 +124,29 @@ void copieur_str(char * tocopie, char * a_copier){
 }
 
 
-list_string stringtoliste(list_char phrase){
+void stringtoliste(list_string *matrice_retourner,list_char *phrase){
     list_char mot;
     mot.content = malloc(sizeof(char));
-    list_string matrice_a_retourner;
-    matrice_a_retourner.content = malloc(sizeof(list_char*));
+    matrice_retourner->content = malloc(sizeof(list_char));
     unsigned int compteur = 0;
-    while(compteur <= phrase.len)
+    while(compteur <= phrase->len)
     {
-        if (phrase.content[compteur] != ' ')
+        if (phrase->content[compteur] != ' ')
         {
-            mot = append_char(mot,phrase.content[compteur]);
+            append_char(&mot,phrase->content[compteur]);
         }
         else{
-            matrice_a_retourner = append_str(matrice_a_retourner, mot);
+            append_str(matrice_retourner, &mot);
             mot.len = 0;
         }
         compteur++;
     }
-    matrice_a_retourner = append_str(matrice_a_retourner,mot);
-    free_liste_char(mot);
-    return matrice_a_retourner;
+    append_str(matrice_retourner,&mot);
+    free_liste_char(&mot);
 }
 
+void reec_list_char(list_char *buffer){
+    free(buffer->content);
+    buffer->content = malloc(1 * sizeof(char));
+    buffer->len = 0;
+}
