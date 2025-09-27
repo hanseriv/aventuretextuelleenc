@@ -2,7 +2,29 @@
 #include <stdio.h>
 #include "fonctionutile.h"
 
+void input(list_char *input){
+    char buffer = getchar();
+    reec_list_char(input);
+    while(buffer != '\n' && buffer != '\r' && buffer != EOF){
+        input->content = realloc(input->content,(input->len + 1) * sizeof(char));
+        input->content[input->len] = buffer;
+        input->len ++;
+        buffer = getchar();
+    }
+    input->content[input->len] = '\0';
+
+
+}
+
+
+
+
+
 void free_liste_char(list_char *phrase){
+    /*
+    entrée : pointeur de list_char
+    libère l'espace stocké
+    */
     free(phrase->content);
 }
 
@@ -24,6 +46,11 @@ void free_liste_string(list_string *matrice){
 }
 
 int is_the_char_the_same(list_char phrase1, list_char phrase2){
+    /*
+    entrée : list_char phrase1 et list_phrase2
+    compare les deux string et retourne False_statement si elle sont différente
+    et True_statement dans le cas contraire
+    */
     if (phrase1.len != phrase2.len){
         return 0;
     }
@@ -53,7 +80,7 @@ void append_char(list_char *phrase, char letter){
 
 void append_charptr(list_char *phrase, char *aajouter){
     /*
-        entrée : list_char phrase, et char *aajouter
+        entrée : list_char *phrase, et char *aajouter
         sortie : phrase
         le but de cette fonction est de réattribuer un pointeur
         pour pouvoir rajouter la string aajouter a la fin de la phrase
@@ -83,6 +110,11 @@ void init_list_char(list_char *phrase, char *acopie){
 
 
 void append_stringchar(list_char *aretourner, list_char *aajouter){
+    /*
+        entrée : 
+    
+    
+    */
     aretourner->len += aajouter->len;
     unsigned int compteur = 0;
     while(compteur <= aajouter->len){
@@ -112,6 +144,7 @@ int len_string(char *str){
     }
     return compteur;
 }
+
 
 void copieur_str(char * tocopie, char * a_copier){
 
@@ -149,4 +182,70 @@ void reec_list_char(list_char *buffer){
     free(buffer->content);
     buffer->content = malloc(1 * sizeof(char));
     buffer->len = 0;
+}
+
+
+unsigned int is_word_in_string(char * atrouver, char * ou_chercher){
+    unsigned int compteur =0;
+    unsigned int compteur_inter = 0;
+    unsigned int longuer = len_string(ou_chercher);
+    unsigned int longeur = len_string(atrouver); 
+    while(compteur != longuer){
+        if (ou_chercher[compteur] == atrouver[compteur_inter])
+            {
+                compteur_inter ++;
+                if (compteur_inter == longeur){
+                    return True_statement;
+                }
+            }
+        else{
+            compteur_inter = 0;
+        }
+        compteur ++;
+    }
+    return False_statement;
+}
+
+char inttochar(int choix){
+    switch(choix){
+        case 0:
+            return '0';
+            break;
+        case 1:
+            return '1';
+            break;
+        case 2:
+            return '2';
+            break;
+        case 3:
+            return '3';
+            break;
+        case 4:
+            return '4';
+            break;
+        case 5:
+            return '5';
+            break;
+        case 6:
+            return '6';
+            break;
+        case 7:
+            return '7';
+            break;
+        case 8:
+            return '8';
+            break;
+        case 9:
+            return '9';
+            break; 
+        default:
+            return '\0';
+    }
+    return '\0';
+
+
+
+
+
+
 }
