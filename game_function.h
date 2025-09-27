@@ -3,6 +3,6 @@
 
 void fonction_deplacement(list_char* prompt);
 
-
+void intro_reader();
 
 #endif

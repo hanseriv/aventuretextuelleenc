@@ -7,11 +7,11 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
 
 list_string inventaire, objetdisponible, evenement;
-int position[] = {0,0};
-int oldposition[] = {0,0};
+int position[] = {1,1};
+int oldposition[] = {1,1};
 int world = 0;
-int oldworld = 0;
-
+int oldworld = -1;
+int error = 0;
 
 
 
@@ -29,6 +29,9 @@ int jeu(){
     list_char jean1;
     init_list_char(&jean1,"");
     do{
+        if(world != oldworld){
+            intro_reader();
+        }
         input(&jean1);
         
         if(is_word_in_string("aller",jean1.content))        
@@ -36,7 +39,11 @@ int jeu(){
             fonction_deplacement(&jean1);
         }
         else{
-            printf("unrecognise expression\n");
+            printf("unrecognise expression : %s\n", jean1.content);
+        }
+
+        if (error == 1){
+            break;
         }
 
     }
@@ -56,13 +63,7 @@ int jeu(){
 
 int main()
 {
-    list_char jen1;
-    init_list_char(&jen1,"");
-    int_translator(&jen1,151021546);
-    printf("%sj\n", jen1.content);
-
-    
-
+    jeu();
     /*
     //The window we'll be rendering to
     SDL_Window* window = NULL;

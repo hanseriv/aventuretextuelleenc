@@ -8,6 +8,7 @@ void input(list_char *input){
     */
     char buffer = getchar();
     reec_list_char(input);
+
     while(buffer != '\n' && buffer != '\r' && buffer != EOF){
         input->content = realloc(input->content,(input->len + 1) * sizeof(char));
         input->content[input->len] = buffer;
@@ -75,9 +76,13 @@ void append_char(list_char *phrase, char letter){
         le but de cette fonction est de réattribuer un pointeur
         pour pouvoir rajouter le caractère letter a la fin de la phrase
     */
+    
     phrase->len++; /*on augmente la taille*/ 
-    phrase->content = realloc(phrase->content, (phrase->len ) * sizeof(char)); /*on augmente la taille alloué a la liste*/ 
+    phrase->content = realloc(phrase->content, (phrase->len +1 ) * sizeof(char)); /*on augmente la taille alloué a la liste*/ 
     phrase->content[phrase->len -1] = letter; /*on ajoute le nouveau contenu*/ 
+    phrase->content[phrase->len ] = '\0';
+    
+    
     
 }
 
@@ -88,13 +93,11 @@ void append_charptr(list_char *phrase, char *aajouter){
         le but de cette fonction est de réattribuer un pointeur
         pour pouvoir rajouter la string aajouter a la fin de la phrase
     */
-    unsigned int longueur = len_string(aajouter);
     unsigned int compteur = 0;
-    while(compteur <= longueur ){
+    while(aajouter[compteur] !='\0' ){
         append_char(phrase,aajouter[compteur]);
         compteur ++;
     }
-    append_char(phrase,'\0');
 }
 
 
@@ -184,6 +187,7 @@ void stringtoliste(list_string *matrice_retourner,list_char *phrase){
 void reec_list_char(list_char *buffer){
     free(buffer->content);
     buffer->content = malloc(1 * sizeof(char));
+
     buffer->len = 0;
 }
 
@@ -252,9 +256,9 @@ char inttochar(int choix){
 }
 
 void translation(list_char *prompt, char a_rajouter){
+    int compteur = prompt->len -1;
     prompt->len++;
     prompt -> content = realloc(prompt->content,(prompt->len)*sizeof(char) );
-    int compteur = prompt->len -1;
     while (compteur != 0){
         prompt->content[compteur] = prompt->content[compteur-1];
         compteur --;
@@ -265,14 +269,29 @@ void translation(list_char *prompt, char a_rajouter){
 
 
 void int_translator(list_char * prompt,int a_traduire){
-    int translator = a_traduire;
-    reec_list_char(prompt);
-    while(translator != 0){
-        translator = a_traduire % 10;
-        translation(prompt, inttochar(translator));
-        a_traduire -= translator;
-        a_traduire /= 10;
-        translator = a_traduire;
+    
+    int signe = 0;
+    if (a_traduire < 0){
+        a_traduire = -a_traduire;
+        signe ++;
     }
 
+    int translator = a_traduire;
+    reec_list_char(prompt);
+    append_char(prompt,'\0');
+    if(translator != 0){
+        while(translator != 0){
+            translator = a_traduire % 10;
+            translation(prompt, inttochar(translator));
+            a_traduire -= translator;
+            a_traduire /= 10;
+            translator = a_traduire;
+        }
+        if(signe == 1){
+            translation(prompt, '-');
+        } 
+    }
+    else{
+        translation(prompt, inttochar(0));
+    }
 }
