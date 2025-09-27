@@ -249,8 +249,30 @@ char inttochar(int choix){
     return '\0';
 
 
+}
+
+void translation(list_char *prompt, char a_rajouter){
+    prompt->len++;
+    prompt -> content = realloc(prompt->content,(prompt->len)*sizeof(char) );
+    int compteur = prompt->len -1;
+    while (compteur != 0){
+        prompt->content[compteur] = prompt->content[compteur-1];
+        compteur --;
+    }
+    prompt->content[0] = a_rajouter; 
+}
 
 
 
+void int_translator(list_char * prompt,int a_traduire){
+    int translator = a_traduire;
+    reec_list_char(prompt);
+    while(translator != 0){
+        translator = a_traduire % 10;
+        translation(prompt, inttochar(translator));
+        a_traduire -= translator;
+        a_traduire /= 10;
+        translator = a_traduire;
+    }
 
 }

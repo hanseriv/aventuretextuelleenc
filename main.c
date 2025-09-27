@@ -56,7 +56,10 @@ int jeu(){
 
 int main()
 {
-    jeu();
+    list_char jen1;
+    init_list_char(&jen1,"");
+    int_translator(&jen1,151021546);
+    printf("%sj\n", jen1.content);
 
     
 

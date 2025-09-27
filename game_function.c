@@ -9,7 +9,9 @@ extern int position[], oldposition[];
 extern int world, oldworld;
 
 
-void fonction_deplacement(list_char * prompt){
+int fonction_deplacement(list_char * prompt){
+    list_char fichier_a_ouvrir;
+    init_list_char(&fichier_a_ouvrir, "./monde");
     if (is_word_in_string("nord",prompt->content)){
         position[0] ++;
     }
@@ -24,9 +26,12 @@ void fonction_deplacement(list_char * prompt){
     }
     else{
         printf("deplacement non valide veuiller utiliser les coordonnees (n, nord...)\n");
+        return 0;
     }
+
+    return 0;
 }
 
 void fonction_regarder(list_char * prompt){
-    
+
 }
