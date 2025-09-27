@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "fonctionutile.h"
+#include "game_function.h"
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
 
@@ -24,28 +25,38 @@ int oldworld = 0;
 
 
 
+int jeu(){
+    list_char jean1;
+    init_list_char(&jean1,"");
+    do{
+        input(&jean1);
+        
+        if(is_word_in_string("aller",jean1.content))        
+        {
+            fonction_deplacement(&jean1);
+        }
+        else{
+            printf("unrecognise expression\n");
+        }
+
+    }
+    while(is_word_in_string("exit",jean1.content) == False_statement);
+    free_liste_char(&jean1);
+
+    return 0;
+
+    
+}
+
+
+
+
+
+
+
 int main()
 {
-
-
-
-    list_char jean1;
-    /*
-    char buffer[1000];
-    fgets(buffer, 1000,stdin);
-    */
-    init_list_char(&jean1,"");
-
-    input(&jean1);
-
-    printf("%s1\n",  jean1.content);
-
-    reec_list_char(&jean1);
-
-    append_charptr(&jean1, "coucou jean sa va ?");
-    printf("%u \n",is_word_in_string("coucou",jean1.content));
-
-    printf("%s\n",  jean1.content);
+    jeu();
 
     
 
@@ -87,7 +98,7 @@ int main()
     //Quit SDL subsystems
     SDL_Quit();
     */
-   free_liste_char(&jean1);
+   
     return 0;
 }
 

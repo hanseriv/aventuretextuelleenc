@@ -3,6 +3,9 @@
 #include "fonctionutile.h"
 
 void input(list_char *input){
+    /*
+        fonction qui lie l'input du flux stdin
+    */
     char buffer = getchar();
     reec_list_char(input);
     while(buffer != '\n' && buffer != '\r' && buffer != EOF){
@@ -22,8 +25,8 @@ void input(list_char *input){
 
 void free_liste_char(list_char *phrase){
     /*
-    entrée : pointeur de list_char
-    libère l'espace stocké
+        entrée : pointeur de list_char
+        libère l'espace stocké
     */
     free(phrase->content);
 }
@@ -47,9 +50,9 @@ void free_liste_string(list_string *matrice){
 
 int is_the_char_the_same(list_char phrase1, list_char phrase2){
     /*
-    entrée : list_char phrase1 et list_phrase2
-    compare les deux string et retourne False_statement si elle sont différente
-    et True_statement dans le cas contraire
+        entrée : list_char phrase1 et list_phrase2
+        compare les deux string et retourne False_statement si elle sont différente
+        et True_statement dans le cas contraire
     */
     if (phrase1.len != phrase2.len){
         return 0;
@@ -115,7 +118,6 @@ void append_stringchar(list_char *aretourner, list_char *aajouter){
     
     
     */
-    aretourner->len += aajouter->len;
     unsigned int compteur = 0;
     while(compteur <= aajouter->len){
         append_char(aretourner,aajouter->content[compteur]);
@@ -128,6 +130,7 @@ void append_str(list_string *matrice, list_char *phrase){
 
     matrice->len++;
     matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char*));  
+    init_list_char(&matrice->content[matrice->len - 1 ], "");
     append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
 
 }
@@ -205,6 +208,8 @@ unsigned int is_word_in_string(char * atrouver, char * ou_chercher){
     }
     return False_statement;
 }
+
+
 
 char inttochar(int choix){
     switch(choix){
