@@ -308,11 +308,13 @@ void int_translator(list_char * prompt,int a_traduire){
 
 int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
     unsigned int compteur =0;
+    if(ou_chercher->len != 0){
     while(compteur != ou_chercher->len){
         if (is_word_in_string(achercher, ou_chercher->content[compteur].content)){
             return True_statement;
         }
         compteur ++;
     }
+    }  
     return False_statement;
 }

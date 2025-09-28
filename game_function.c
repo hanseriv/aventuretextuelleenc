@@ -264,7 +264,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
 
 
 
-            if(is_word_in_string(word_inter,prompt->content) == True_statement || is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
+            if(is_word_in_string(word_inter,prompt->content) == True_statement && is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
                 buffer[0] ='\0';
                 while(is_word_in_string(":",buffer)!= True_statement){
                     printf("%s", buffer);
@@ -273,7 +273,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
                 found = 1;
                 break;
             }
-            else{
+            else if(is_a_string_in_list_string(word_inter,&inventaire)) {
                 found =1;
                 printf("j\'ai pris cet objet...\n");
                 break;
@@ -311,7 +311,6 @@ void print_object_description(FILE * streamfile,list_char * prompt){
             }
 
             word_inter[compteur] = '\0';
-            printf("%s\n", word_inter);
 
             if(is_word_in_string(word_inter,prompt->content) == True_statement){
                 /*printf("I HAVE FOUND THE OBJECT MOTHERFUCKER\n");*/
@@ -378,6 +377,24 @@ void print_object_description(FILE * streamfile,list_char * prompt){
 
 
 
+int can_i_enter(FILE * filestream){
+    char buffer[1000] = "";
+    while(is_word_in_string("conditionentre", buffer) == False_statement){
+        fgets(buffer,1000,filestream);
+    }
+    buffer[0] ='\0';
+    while(is_word_in_string("END_COND", buffer) == False_statement){
+        if(is_a_string_in_list_string(buffer,&evenement) == False_statement && buffer[0] !='\0'){
+                return False_statement;
+        }
+        fgets(buffer,1000,filestream);
+        
+    }
+
+    return True_statement;
+
+}
+
 
 
 
@@ -431,9 +448,17 @@ int fonction_deplacement(list_char * prompt){
         position[1] = oldposition[1];
     }
     else{
-        oldposition[0] = position[0];
-        oldposition[1] = position[1];
-        description_reader(element);
+        if (can_i_enter(element)){
+            oldposition[0] = position[0];
+            oldposition[1] = position[1];
+            rewind(element);
+            description_reader(element);
+        }
+        else{
+            position[0] = oldposition[0];
+            position[1] = oldposition[1];
+            printf("je ne crois pas pouvoir le faire malheureusment...\n");
+        }
         fclose(element);
         
 

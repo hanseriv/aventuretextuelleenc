@@ -42,3 +42,5 @@ END_PNJ
 eventobject:
 END_EVENT
 
+conditionentre:
+END_COND
