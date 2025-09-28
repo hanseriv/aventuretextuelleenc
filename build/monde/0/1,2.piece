@@ -31,12 +31,12 @@ Mais vous avez oublié en quoi elle vous sera utile...
 END_OBJ
 
 pnj:
-
-banner : 
+banner: 
 Bordel, il est déprimant ce jeu...
-moi : 
+:
+moi: 
 je crois que cela ne vaut pas la peine de vivre ainsi...
-
+:
 END_PNJ
 
 eventobject:

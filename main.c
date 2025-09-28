@@ -99,6 +99,11 @@ int jeu(){
 
 
         }
+        else if(is_word_in_string("parler",prompt.content) || is_word_in_string("discuter",prompt.content)){
+
+            fonction_parler(&prompt);
+
+        }
         else{
             /*
             

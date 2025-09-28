@@ -24,7 +24,89 @@ void waiting(){
 }
 
 
+void is_there_room_around_you(){
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    list_char buffer_fichier;
+    init_list_char(&fichier_a_ouvrir, "monde");
+    
+    init_list_char(&buffer_fichier,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0] + 1);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
 
+
+    if(element != NULL){
+        printf("il y a une piece au Nord...\n") ;
+        fclose(element);
+    }
+    reec_list_char(&buffer_fichier);
+    reec_list_char(&fichier_a_ouvrir);
+    append_charptr(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0] - 1);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+
+    if(element != NULL){
+        printf("il y a une piece au Sud...\n") ;
+        fclose(element);
+    }
+
+    reec_list_char(&buffer_fichier);
+    reec_list_char(&fichier_a_ouvrir);
+    append_charptr(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1] - 1);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+
+    if(element != NULL){
+        printf("il y a une piece au Est...\n") ;
+        fclose(element);
+    }
+
+    reec_list_char(&buffer_fichier);
+    reec_list_char(&fichier_a_ouvrir);
+    append_charptr(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1] + 1);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+
+    if(element != NULL){
+        printf("il y a une piece au Ouest...\n") ;
+        fclose(element);
+    }
+
+
+}
 
 
 void intro_reader(){
@@ -313,11 +395,11 @@ int fonction_deplacement(list_char * prompt){
     else if (is_word_in_string("sud",prompt->content)){
         position[0] --;
     }
-    else if (is_word_in_string("est", prompt->content)){
+    else if (is_word_in_string("est", prompt->content) && is_word_in_string("ouest" , prompt->content) == False_statement){
         position[1] --;
     }
     else if (is_word_in_string("ouest" , prompt->content)){
-        position[1] --;
+        position[1] ++;
     }
     else{
         printf("deplacement non valide veuiller utiliser les coordonnees (sud, nord...)\n");
@@ -338,6 +420,7 @@ int fonction_deplacement(list_char * prompt){
     int_translator(&buffer,position[1]);
     append_charptr(&fichier_a_ouvrir, buffer.content);
     append_charptr(&fichier_a_ouvrir, ".piece");
+    printf("%s\n",fichier_a_ouvrir.content);
     /*
         fin de la retranscrisption du niveau 
     */
@@ -488,6 +571,7 @@ void fonction_regarder(list_char * prompt){
     fonction qui gèrent les descriptions de l'environement
 
     */
+
     FILE *element;
     list_char fichier_a_ouvrir;
     init_list_char(&fichier_a_ouvrir, "monde");
@@ -504,6 +588,7 @@ void fonction_regarder(list_char * prompt){
     append_charptr(&fichier_a_ouvrir, buffer.content);
     append_charptr(&fichier_a_ouvrir, ".piece");
     element = fopen(fichier_a_ouvrir.content,"r");
+
     if(element == NULL){
         printf("impossible to open the said file...\n");
         error =1;
@@ -518,10 +603,94 @@ void fonction_regarder(list_char * prompt){
     else if (is_word_in_string("inventaire", prompt->content) || is_word_in_string("moi", prompt->content) ||is_word_in_string("m\'", prompt->content)){
         print_inventary();
     }
+    else if (is_word_in_string("alentour", prompt->content) || is_word_in_string("autour", prompt->content)){
+        is_there_room_around_you();
+    }
     else{
         print_object_description(element,prompt);
         
     }
     fclose(element);
+
+}
+
+
+
+void fonction_parler(list_char * prompt){
+    char buffer[1000];
+
+    char word_inter[100] ;
+    int compteur = 0;
+
+    int found = 0;
+  
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    init_list_char(&fichier_a_ouvrir, "monde");
+    list_char buffer_fichier;
+    init_list_char(&buffer_fichier,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+
+    if(element == NULL){
+        printf("impossible to open the said file...\n");
+        error =1;
+    }
+    else{
+        
+    while(is_word_in_string("pnj",buffer) == False_statement){
+        fgets(buffer, 1000,element);
+    }
+    /*
+    
+    on lie chaque ligne jusqu'a la balise END_OBJ pour vérifier s'il y a l'objet 
+    
+    */
+    while(is_word_in_string("END_PNJ",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                word_inter[compteur] = buffer[compteur];
+                compteur ++;
+            }
+
+            word_inter[compteur] = '\0';
+
+
+
+            if(is_word_in_string(word_inter,prompt->content) == True_statement){
+                printf("%s :\n",word_inter);
+                buffer[0] ='\0';
+                while(is_word_in_string(":",buffer)!= True_statement){
+                    printf("%s", buffer);
+                    fgets(buffer, 1000,element);
+                }
+                found = 1;
+                break;
+            }
+
+
+            
+
+
+        }
+        fgets(buffer, 1000,element);
+
+    }
+
+    }
+    if(found == 0){
+        printf("je ne vois pas cette personne...peut-etre mon imagination\n");
+    }
 
 }

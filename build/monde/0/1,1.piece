@@ -31,13 +31,15 @@ vous de vous ressaisir...
 END_OBJ
 
 pnj:
-Jean : 
+Jean: 
 je ne sais que dire... 
 c'est comme si le 
 monde m'abandonnait...
-moi : 
+:
+moi: 
 je ne sais pas quoi faire, 
 j'ai mal a la tête...
+:
 END_PNJ
 
 eventobject:

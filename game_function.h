@@ -6,5 +6,6 @@ void description_reader(FILE * streamfile);
 void fonction_regarder(list_char * prompt);
 void intro_reader();
 void fonction_prendre(list_char * prompt);
+void fonction_parler(list_char * prompt);
 
 #endif

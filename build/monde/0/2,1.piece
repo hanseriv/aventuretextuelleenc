@@ -16,14 +16,13 @@ Peut-être est-il temps de mettre fin
 END_OBJ
 
 pnj:
-
-moi : 
+moi: 
 je me hais... Pour vu que ça cesse...
-
+:
 END_PNJ
 
 eventobject:
-pistolet : munition : eventsuicide : description: Votre vieux compagnon, il semblerait qu'il vous appelle, mais il lui manque quelque chose pour qu'il vous réconforte... : (nonefound) : Peut-être qu'il lui faudrait quelque chose pour qu'il soit utile : (iffound) : Vous vous sentez las, vous mettez le pistolet contre votre tempe... Vous faites un compte à rebours dans votre tête... Votre doigt lentement appuyant sur la détente... Et soudain la gachette devient très lègere... upworld
+pistolet:munition:eventsuicide:description: Votre vieux compagnon, il semblerait qu'il vous appelle, mais il lui manque quelque chose pour qu'il vous réconforte... : (nonefound) : Peut-être qu'il lui faudrait quelque chose pour qu'il soit utile : (iffound) : Vous vous sentez las, vous mettez le pistolet contre votre tempe... Vous faites un compte à rebours dans votre tête... Votre doigt lentement appuyant sur la détente... Et soudain la gachette devient très lègere... upworld
 END_EVENT
 
 conditionentre:
