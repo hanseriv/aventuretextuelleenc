@@ -20,7 +20,6 @@ void waiting(){
     init_list_char(&prompt,"");
     printf("please press <enter> to continue...");
     input(&prompt);
-    free_liste_char(&prompt);
 }
 
 
@@ -139,8 +138,6 @@ void intro_reader(){
         }
     }
     waiting();
-    free_liste_char(&buffer);
-    free_liste_char(&fichier_a_ouvrir);
     fclose(element);
 }
 
@@ -437,8 +434,6 @@ int fonction_deplacement(list_char * prompt){
         
 
     }
-        free_liste_char(&buffer);
-        free_liste_char(&fichier_a_ouvrir);
     return 0;
 }
 
@@ -509,7 +504,6 @@ void took(FILE * streamfile, list_char * prompt){
         fgets(buffer, 1000,streamfile);
 
     }
-    free_liste_char(&buffer_obj);
     if (found == 0){
         printf("suis-je censer materialiser cet objet et le prendre ?...\n");
     }
@@ -554,6 +548,7 @@ void fonction_prendre(list_char * prompt){
     }
     else{
         took(element,prompt);
+        fclose(element);
     }
 }
 
@@ -609,6 +604,7 @@ void fonction_regarder(list_char * prompt){
         print_object_description(element,prompt);
         
     }
+
     fclose(element);
 
 }
@@ -686,10 +682,10 @@ void fonction_parler(list_char * prompt){
         fgets(buffer, 1000,element);
 
     }
-
-    }
     if(found == 0){
         printf("je ne vois pas cette personne...peut-etre mon imagination\n");
     }
-
+    fclose(element);
+    }
+    
 }

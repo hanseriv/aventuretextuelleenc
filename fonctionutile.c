@@ -8,14 +8,15 @@ void input(list_char *input){
     */
     char buffer = getchar();
     reec_list_char(input);
-
+    printf("%i",input->len);
     while(buffer != '\n' && buffer != '\r' && buffer != EOF){
         input->content = realloc(input->content,(input->len + 1) * sizeof(char));
         input->content[input->len] = buffer;
         input->len ++;
         buffer = getchar();
     }
-    input->content[input->len] = '\0';
+    printf("%i",input->len);
+    input->content[input->len ] = '\0';
 
 
 }
