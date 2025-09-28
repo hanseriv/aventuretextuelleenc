@@ -104,6 +104,11 @@ int jeu(){
             fonction_parler(&prompt);
 
         }
+        else if(is_word_in_string("utiliser",prompt.content) || is_word_in_string("mettre",prompt.content)){
+
+            fonction_utiliser(&prompt);
+
+        }
         else{
             /*
             

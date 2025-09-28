@@ -378,6 +378,11 @@ void print_object_description(FILE * streamfile,list_char * prompt){
 
 
 int can_i_enter(FILE * filestream){
+    /*
+    
+    fonction qui teste si l'on a tous les evenements necessaires pour passer une porte
+    
+    */
     char buffer[1000] = "";
     while(is_word_in_string("conditionentre", buffer) == False_statement){
         fgets(buffer,1000,filestream);
@@ -401,7 +406,7 @@ int can_i_enter(FILE * filestream){
 int fonction_deplacement(list_char * prompt){
     /*
     
-    fonction qui gèrent les déplacements
+        fonction qui gèrent les déplacements
 
     */
     FILE *element;
@@ -487,6 +492,11 @@ void print_inventary(){
 
 
 void took(FILE * streamfile, list_char * prompt){
+    /*
+    
+    fonction qui vérifie si l'utilisateur peut prendre l'objet 
+
+    */
     char buffer[1000] = "\0";
     list_char buffer_obj ;
     init_list_char(&buffer_obj,"");
@@ -557,6 +567,11 @@ void took(FILE * streamfile, list_char * prompt){
 
 
 void fonction_prendre(list_char * prompt){
+    /*
+    
+    fonction qui vérifie si l'utilisateur peut prendre l'objet 
+
+    */
 
     FILE *element;
     list_char fichier_a_ouvrir;
@@ -725,4 +740,141 @@ void fonction_parler(list_char * prompt){
     }
     free_liste_char(&fichier_a_ouvrir);
     free_liste_char(&buffer_fichier);
+}
+
+
+
+void fonction_utiliser(list_char * prompt){
+    char buffer[1000] = "\0";
+
+    char word_inter[100] = "\0";
+    int compteur = 0;
+    int offset = 0;
+
+    int found = 0;
+
+    /*
+    
+        création du stream
+    
+    */
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    init_list_char(&fichier_a_ouvrir, "monde");
+    list_char buffer_fichier;
+    list_char event;
+    init_list_char(&event,"");
+    init_list_char(&buffer_fichier,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    /*
+    
+        ouverture du stream
+    
+    */
+    element = fopen(fichier_a_ouvrir.content,"r");
+
+
+    while(is_word_in_string("eventobject",buffer) == False_statement){
+        fgets(buffer, 1000,element);
+    }
+    buffer[0] ='\0';
+
+    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+        if (is_word_in_string(":",buffer) == True_statement){
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                word_inter[compteur] = buffer[compteur];
+                compteur ++;
+            }
+
+            word_inter[compteur] = '\0';
+            if (is_word_in_string(word_inter, prompt->content)){
+                /*
+                
+                    on a trouver l'objet on vérifie que l'objet utiliser est le bon 
+                
+                */
+
+                found = 1;
+                offset = compteur;
+                compteur = 0;
+                while(buffer[offset + compteur] !=':'){
+                    word_inter[compteur] = buffer[offset + compteur];
+                    compteur ++;
+                }
+                word_inter[compteur] = '\0';
+                if (is_word_in_string(word_inter, prompt->content)){
+                    offset += compteur;
+                    compteur = 0;
+                    while(buffer[offset + compteur] !=':'){
+                        word_inter[compteur] = buffer[offset + compteur];
+                        compteur ++;
+                    }
+                    append_charptr(&event,word_inter);
+                    append_str(&evenement,&event);
+                    compteur = 0;
+                    while(buffer[compteur] != '('){
+                        compteur ++;
+                    }
+                    compteur ++;
+                    while(buffer[compteur] != '('){
+                        compteur ++;
+                    }
+                    while(buffer[compteur] != ':'){
+                        compteur ++;
+                    }
+                    compteur ++;
+                    while(buffer[compteur] != ':'){
+                        printf("%c",buffer[compteur]);
+                        compteur ++;
+                    }
+                    printf("\n");
+                    break;
+
+                }
+                else{
+
+                    compteur =0;
+                    while(buffer[compteur] != '('){
+                        compteur ++;
+                    }
+                    while(buffer[compteur] != ':'){
+                        compteur ++;
+                    }
+                    compteur ++;
+                    while(buffer[compteur] != ':'){
+                        printf("%c",buffer[compteur]);
+                        compteur ++;
+                    }
+                    printf("\n");
+                    break;
+                }
+
+            }
+
+
+
+
+            }
+            fgets(buffer, 1000,element);
+    
+        } 
+    if(found == 0){
+        printf("je ne suis pas sur de comprendre l'objet que je suis censer saisir...\n");
+    }
+
+
+    fclose(element);
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer_fichier);
+    free_liste_char(&event);
 }
