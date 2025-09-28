@@ -41,6 +41,8 @@ void intro_reader(){
         }
         printf("\n");
     }
+    free_liste_char(&buffer);
+    free_liste_char(&fichier_a_ouvrir);
     fclose(element);
 }
 
@@ -93,8 +95,16 @@ int fonction_deplacement(list_char * prompt){
         position[0] = oldposition[0];
         position[1] = oldposition[1];
     }
+    else{
+        oldposition[0] = position[0];
+        oldposition[1] = position[1];
+        fclose(element);
+    }
+        free_liste_char(&buffer);
+        free_liste_char(&fichier_a_ouvrir);
     return 0;
 }
+
 
 void fonction_regarder(list_char * prompt){
 
