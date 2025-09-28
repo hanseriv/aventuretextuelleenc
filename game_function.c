@@ -20,6 +20,7 @@ void waiting(){
     init_list_char(&prompt,"");
     printf("please press <enter> to continue...");
     input(&prompt);
+    free_liste_char(&prompt);
 }
 
 
@@ -103,7 +104,8 @@ void is_there_room_around_you(){
         printf("il y a une piece au Ouest...\n") ;
         fclose(element);
     }
-
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer_fichier);
 
 }
 
@@ -118,7 +120,7 @@ void intro_reader(){
     list_char fichier_a_ouvrir;
     list_char buffer;
     oldworld = world;
-    char buffer_c;
+    char buffer_c ='\0';
     init_list_char(&buffer,"");
     init_list_char(&fichier_a_ouvrir, "./monde/");
     int_translator(&buffer,world);
@@ -139,6 +141,8 @@ void intro_reader(){
     }
     waiting();
     fclose(element);
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer);
 }
 
 
@@ -166,8 +170,8 @@ void description_reader(FILE * streamfile){
 }
 
 void print_object(FILE * streamfile){
-    char buffer[1000];
-    char word_inter[100] ;
+    char buffer[1000] = "\0";
+    char word_inter[100]= "\0" ;
     int compteur = 0;
     while(is_word_in_string("objet",buffer) == False_statement){
         fgets(buffer, 1000,streamfile);
@@ -217,9 +221,9 @@ void print_object(FILE * streamfile){
 }
 
 void print_object_description(FILE * streamfile,list_char * prompt){
-    char buffer[1000];
+    char buffer[1000] ="\0";
     char inter_buffer[20] = "";
-    char word_inter[100] ;
+    char word_inter[100] ="\0" ;
     int compteur = 0;
     int inter_compteur =0;
     int found = 0;
@@ -434,6 +438,8 @@ int fonction_deplacement(list_char * prompt){
         
 
     }
+    free_liste_char(&buffer);
+    free_liste_char(&fichier_a_ouvrir);
     return 0;
 }
 
@@ -456,10 +462,10 @@ void print_inventary(){
 
 
 void took(FILE * streamfile, list_char * prompt){
-    char buffer[1000];
+    char buffer[1000] = "\0";
     list_char buffer_obj ;
     init_list_char(&buffer_obj,"");
-    char word_inter[20];
+    char word_inter[20] = "\0";
     int found = 0;
     int compteur = 0;
     while(is_word_in_string("objet",buffer) == False_statement){
@@ -514,6 +520,7 @@ void took(FILE * streamfile, list_char * prompt){
     else{
         printf("vous avez pris l\'objet\n");
     }
+    free_liste_char(&buffer_obj);
 }
 
 
@@ -550,6 +557,8 @@ void fonction_prendre(list_char * prompt){
         took(element,prompt);
         fclose(element);
     }
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer);
 }
 
 
@@ -606,15 +615,17 @@ void fonction_regarder(list_char * prompt){
     }
 
     fclose(element);
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer);
 
 }
 
 
 
 void fonction_parler(list_char * prompt){
-    char buffer[1000];
+    char buffer[1000] = "\0";
 
-    char word_inter[100] ;
+    char word_inter[100] = "\0";
     int compteur = 0;
 
     int found = 0;
@@ -687,5 +698,6 @@ void fonction_parler(list_char * prompt){
     }
     fclose(element);
     }
-    
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer_fichier);
 }

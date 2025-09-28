@@ -125,7 +125,11 @@ int jeu(){
     }
     while(1);
     free_liste_char(&prompt);
-
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer);
+    free_liste_string(&inventaire);
+    free_liste_string(&objetdisponible);
+    free_liste_string(&evenement);
     return 0;
 
     

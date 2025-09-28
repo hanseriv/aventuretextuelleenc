@@ -8,14 +8,13 @@ void input(list_char *input){
     */
     char buffer = getchar();
     reec_list_char(input);
-    printf("%i",input->len);
     while(buffer != '\n' && buffer != '\r' && buffer != EOF){
         input->content = realloc(input->content,(input->len + 1) * sizeof(char));
         input->content[input->len] = buffer;
         input->len ++;
         buffer = getchar();
     }
-    printf("%i",input->len);
+    input->content = realloc(input->content,(input->len +1) * sizeof(char));
     input->content[input->len ] = '\0';
 
 
@@ -40,14 +39,18 @@ void free_liste_string(list_string *matrice){
         le but de cette fonction est de libéré l'espace mémoire utilisé
         par la structure une fois que celle-ci a finie d'etre utilisé
     */
-    unsigned int longueur = matrice->len;
-    list_char pointer_buffer;
-    while (longueur != 0){
-        pointer_buffer =  matrice->content[longueur -1] ;
-        free_liste_char(&pointer_buffer);
-        longueur --;
+    unsigned int longueur = 0;
+    if(matrice->len != 0){
+        while (longueur != matrice->len-1){
+            free_liste_char(&matrice->content[longueur]);
+            longueur ++;
+        }
     }
-    free(matrice);
+    else{
+        free_liste_char(&matrice->content[0]);
+        
+    }
+    free(matrice->content);
 }
 
 int is_the_char_the_same(list_char phrase1, list_char phrase2){
@@ -105,6 +108,7 @@ void append_charptr(list_char *phrase, char *aajouter){
 void init_list_string(list_string *str_a_init){
     str_a_init->content = malloc(1* sizeof(list_char ));
     str_a_init->len = 0;
+    init_list_char(&str_a_init->content[0],"");
 }
 
 
