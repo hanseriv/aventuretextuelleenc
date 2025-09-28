@@ -420,7 +420,6 @@ int fonction_deplacement(list_char * prompt){
     int_translator(&buffer,position[1]);
     append_charptr(&fichier_a_ouvrir, buffer.content);
     append_charptr(&fichier_a_ouvrir, ".piece");
-    printf("%s\n",fichier_a_ouvrir.content);
     /*
         fin de la retranscrisption du niveau 
     */
