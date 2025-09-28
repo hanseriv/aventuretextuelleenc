@@ -88,6 +88,7 @@ void description_reader(FILE * streamfile){
 
 void print_object(FILE * streamfile){
     char buffer[1000];
+    char word_inter[100] ;
     int compteur = 0;
     while(is_word_in_string("objet",buffer) == False_statement){
         fgets(buffer, 1000,streamfile);
@@ -96,12 +97,24 @@ void print_object(FILE * streamfile){
     printf("dans la pièce il y a :\n");
     while(is_word_in_string("END_OBJ",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+
+
             compteur = 0;
+
+
             while(buffer[compteur] !=':'){
-                printf("%c",buffer[compteur]);
+                word_inter[compteur] = buffer[compteur];
                 compteur ++;
             }
-            printf("\n");
+
+
+            word_inter[compteur] = '\0';
+            if (is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
+                printf("%s", word_inter);
+                printf("\n");
+            }
+
+            
         }
         fgets(buffer, 1000,streamfile);
     }
@@ -168,7 +181,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
 
 
 
-            if(is_word_in_string(word_inter,prompt->content) == True_statement){
+            if(is_word_in_string(word_inter,prompt->content) == True_statement || is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
                 buffer[0] ='\0';
                 while(is_word_in_string(":",buffer)!= True_statement){
                     printf("%s", buffer);
@@ -176,8 +189,14 @@ void print_object_description(FILE * streamfile,list_char * prompt){
                 }
                 found = 1;
                 break;
-
             }
+            else{
+                found =1;
+                printf("j\'ai pris cet objet...\n");
+                break;
+            }
+
+            
 
 
         }
@@ -292,13 +311,13 @@ int fonction_deplacement(list_char * prompt){
         position[0] ++;
     }
     else if (is_word_in_string("sud",prompt->content)){
-        position[1] --;
+        position[0] --;
     }
     else if (is_word_in_string("est", prompt->content)){
-        position[2] --;
+        position[1] --;
     }
     else if (is_word_in_string("ouest" , prompt->content)){
-        position[2] --;
+        position[1] --;
     }
     else{
         printf("deplacement non valide veuiller utiliser les coordonnees (sud, nord...)\n");
@@ -359,6 +378,105 @@ void print_inventary(){
 
 
 
+void took(FILE * streamfile, list_char * prompt){
+    char buffer[1000];
+    list_char buffer_obj ;
+    init_list_char(&buffer_obj,"");
+    char word_inter[20];
+    int found = 0;
+    int compteur = 0;
+    while(is_word_in_string("objet",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    buffer[0] = '\0';
+    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                word_inter[compteur] = buffer[compteur];
+                compteur ++;
+            }
+
+            word_inter[compteur] = '\0';
+
+
+
+            if(is_word_in_string(word_inter,prompt->content) == True_statement && is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
+                buffer[0] ='\0';
+                while(is_word_in_string(":",buffer)!= True_statement){
+                    fgets(buffer, 1000,streamfile);
+                }
+                if (is_word_in_string("1",buffer) == True_statement)
+                {
+                    append_charptr(&buffer_obj,word_inter);
+                    
+                    append_str(&inventaire,&buffer_obj);
+                    found = 2;
+
+                }
+                else{
+                    found = 1;
+                }
+                break;
+
+            }
+
+
+        }
+        fgets(buffer, 1000,streamfile);
+
+    }
+    free_liste_char(&buffer_obj);
+    if (found == 0){
+        printf("suis-je censer materialiser cet objet et le prendre ?...\n");
+    }
+    else if (found == 1)
+    {
+        printf("comment suis-je censer porter cela ? je n'en ai ni l'envie...ni la force...\n");
+    }
+    else{
+        printf("vous avez pris l\'objet\n");
+    }
+}
+
+
+
+
+
+
+
+
+
+void fonction_prendre(list_char * prompt){
+
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    init_list_char(&fichier_a_ouvrir, "monde");
+    list_char buffer;
+    init_list_char(&buffer,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer,world);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+    if(element == NULL){
+        printf("cannot open the file...please contact the programming team...\n");
+        error = 1;
+    }
+    else{
+        took(element,prompt);
+    }
+}
+
+
+
 
 
 
@@ -386,7 +504,11 @@ void fonction_regarder(list_char * prompt){
     append_charptr(&fichier_a_ouvrir, buffer.content);
     append_charptr(&fichier_a_ouvrir, ".piece");
     element = fopen(fichier_a_ouvrir.content,"r");
-    if (is_word_in_string("piece" , prompt->content)){
+    if(element == NULL){
+        printf("impossible to open the said file...\n");
+        error =1;
+    }
+    else if (is_word_in_string("piece" , prompt->content)){
         description_reader(element);
         
     }

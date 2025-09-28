@@ -31,6 +31,9 @@ int jeu(){
     list_char buffer;
     FILE  *element;
     int compteur;
+    init_list_string(&inventaire);
+    init_list_string(&objetdisponible);
+    init_list_string(&evenement);
     init_list_char(&fichier_a_ouvrir, "");
     init_list_char(&buffer, "");
     init_list_char(&prompt,"");
@@ -89,6 +92,12 @@ int jeu(){
 
             */
             break;
+        }
+        else if(is_word_in_string("prendre",prompt.content)){
+
+            fonction_prendre(&prompt);
+
+
         }
         else{
             /*

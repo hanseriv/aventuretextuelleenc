@@ -101,6 +101,11 @@ void append_charptr(list_char *phrase, char *aajouter){
 }
 
 
+void init_list_string(list_string *str_a_init){
+    str_a_init->content = malloc(1* sizeof(list_char ));
+    str_a_init->len = 0;
+}
+
 
 void init_list_char(list_char *phrase, char *acopie){
     /*
@@ -122,7 +127,7 @@ void append_stringchar(list_char *aretourner, list_char *aajouter){
     
     */
     unsigned int compteur = 0;
-    while(compteur <= aajouter->len){
+    while(compteur < aajouter->len){
         append_char(aretourner,aajouter->content[compteur]);
         compteur ++;
     }
@@ -132,10 +137,9 @@ void append_stringchar(list_char *aretourner, list_char *aajouter){
 void append_str(list_string *matrice, list_char *phrase){
 
     matrice->len++;
-    matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char*));  
+    matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char));  
     init_list_char(&matrice->content[matrice->len - 1 ], "");
     append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
-
 }
 
 
@@ -294,4 +298,16 @@ void int_translator(list_char * prompt,int a_traduire){
     else{
         translation(prompt, inttochar(0));
     }
+}
+
+
+int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
+    unsigned int compteur =0;
+    while(compteur != ou_chercher->len){
+        if (is_word_in_string(achercher, ou_chercher->content[compteur].content)){
+            return True_statement;
+        }
+        compteur ++;
+    }
+    return False_statement;
 }

@@ -17,6 +17,8 @@ struct list_string{
 
 void input(list_char *input);
 
+void init_list_string(list_string *str_a_init);
+
 
 void free_liste_char(list_char *phrase);
 
@@ -62,4 +64,7 @@ char inttochar(int choix);
 void int_translator(list_char * prompt,int a_traduire);
 
 int len_string(char *str);
+
+
+int is_a_string_in_list_string(char * achercher, list_string * ou_chercher);
 #endif 
