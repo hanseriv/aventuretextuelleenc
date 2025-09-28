@@ -60,4 +60,6 @@ unsigned int is_word_in_string(char * atrouver, char * ou_chercher);
 char inttochar(int choix);
 
 void int_translator(list_char * prompt,int a_traduire);
+
+int len_string(char *str);
 #endif 

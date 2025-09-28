@@ -145,7 +145,7 @@ int len_string(char *str){
 
     unsigned int compteur = 0;
 
-    while(str[compteur] != 0){
+    while(str[compteur] != '\0'){
         compteur ++;
     }
     return compteur;

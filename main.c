@@ -26,29 +26,91 @@ int error = 0;
 
 
 int jeu(){
-    list_char jean1;
-    init_list_char(&jean1,"");
+    list_char prompt;
+    list_char fichier_a_ouvrir;
+    list_char buffer;
+    FILE  *element;
+    int compteur;
+    init_list_char(&fichier_a_ouvrir, "");
+    init_list_char(&buffer, "");
+    init_list_char(&prompt,"");
     do{
         if(world != oldworld){
             intro_reader();
+            position[0] =1;
+            position[1] =1;
+            oldposition[0] = 1;
+            oldposition[1] = 1;
+
+            reec_list_char(&fichier_a_ouvrir);
+            append_charptr(&fichier_a_ouvrir,"./monde/");
+            int_translator(&buffer,world);
+            append_charptr(&fichier_a_ouvrir, buffer.content);
+            append_charptr(&fichier_a_ouvrir,"/1,1.piece");
+            element = fopen(fichier_a_ouvrir.content,"r");
+            if (element == NULL){
+                printf("error missing file...");
+                return -1;
+            }
+            description_reader(element);
+            fclose(element);
         }
-        input(&jean1);
+        printf(":>");
+        input(&prompt);
         
-        if(is_word_in_string("aller",jean1.content))        
+        if(is_word_in_string("aller",prompt.content))        
         {
-            fonction_deplacement(&jean1);
+            /*
+            
+            fonction de déplacement...
+
+            */
+            fonction_deplacement(&prompt);
+        }
+        else if(is_word_in_string("clear", prompt.content)){
+            /*
+
+            fonction qui "efface" le texte...
+
+            */
+            compteur = 0;
+            while(compteur != 1000){
+                printf("\n");
+                compteur ++;
+            }
+        }
+        else if(is_word_in_string("regarder", prompt.content) ||is_word_in_string("inspecter", prompt.content) ){
+            fonction_regarder(&prompt);
+        }
+        else if(is_word_in_string("exit",prompt.content)){
+            /*
+            
+            fonction de fin de programme
+
+            */
+            break;
         }
         else{
-            printf("unrecognise expression : %s\n", jean1.content);
+            /*
+            
+            ici on affiche que la commande qui n'as pas fonctionné
+            
+            */
+            printf("unrecognise expression : %s\n", prompt.content);
         }
 
         if (error == 1){
+            /*
+            
+            si on a une erreur on arrète le programme.
+            
+            */
             break;
         }
 
     }
-    while(is_word_in_string("exit",jean1.content) == False_statement);
-    free_liste_char(&jean1);
+    while(1);
+    free_liste_char(&prompt);
 
     return 0;
 

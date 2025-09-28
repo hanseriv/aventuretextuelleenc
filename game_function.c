@@ -9,8 +9,30 @@ extern list_string inventaire, objetdisponible, evenement;
 extern int position[], oldposition[];
 extern int world, oldworld,error;
 
+void waiting(){
+    /*
+    
+    fonction qui stop le programme temporairement pour laisser
+    le temps a l'utilisateur de lire.
+    
+    */
+    list_char prompt;
+    init_list_char(&prompt,"");
+    printf("please press <enter> to continue...");
+    input(&prompt);
+    free_liste_char(&prompt);
+}
+
+
+
+
 
 void intro_reader(){
+    /*
+    
+    fonction qui lie les intros du monde actuelle
+
+    */
     FILE  *element;
     list_char fichier_a_ouvrir;
     list_char buffer;
@@ -28,22 +50,228 @@ void intro_reader(){
         printf("error while reading the intro from your world please make sure that every file is in order...\n");
     }
     else{
-        int compteur = 0;
         buffer_c = fgetc(element);
         while(buffer_c != EOF){
             printf("%c", buffer_c);
-            compteur ++;
-            if(compteur == colonne){
-                compteur = 0;
-                printf("\n");
-            }
             buffer_c = fgetc(element);
         }
-        printf("\n");
     }
+    waiting();
     free_liste_char(&buffer);
     free_liste_char(&fichier_a_ouvrir);
     fclose(element);
+}
+
+
+void description_reader(FILE * streamfile){
+    /*
+    
+    fonction qui lie automatiquement les descriptions des pieces
+    
+    */
+    char buffer[1000] ="";
+    while(is_word_in_string("description",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    
+
+    buffer[0] = '\0';
+    while(is_word_in_string("END_DESC",buffer) == False_statement){
+        
+        printf("%s",buffer);
+        
+        fgets(buffer, 1000,streamfile);
+    }
+
+
+}
+
+void print_object(FILE * streamfile){
+    char buffer[1000];
+    int compteur = 0;
+    while(is_word_in_string("objet",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    buffer[0] = '\0';
+    printf("dans la pièce il y a :\n");
+    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                printf("%c",buffer[compteur]);
+                compteur ++;
+            }
+            printf("\n");
+        }
+        fgets(buffer, 1000,streamfile);
+    }
+
+    while(is_word_in_string("eventobject",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    buffer[0] = '\0';
+    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                printf("%c",buffer[compteur]);
+                compteur ++;
+            }
+            printf("\n");
+        }
+        fgets(buffer, 1000,streamfile);
+    }
+
+}
+
+void print_object_description(FILE * streamfile,list_char * prompt){
+    char buffer[1000];
+    char inter_buffer[20] = "";
+    char word_inter[100] ;
+    int compteur = 0;
+    int inter_compteur =0;
+    int found = 0;
+    int compteur_chariot = 0;
+
+    /*
+    
+    on place le curseur sur la rebrique des objets
+
+    */
+
+    while(is_word_in_string("objet",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    /*
+    
+    on reinitialise la basile pour eviter d'afficher la dite rebirique et cassé le 4eme mur
+    
+    */
+
+
+    buffer[0] = '\0';
+    /*
+    
+    on lie chaque ligne jusqu'a la balise END_OBJ pour vérifier s'il y a l'objet 
+    
+    */
+    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                word_inter[compteur] = buffer[compteur];
+                compteur ++;
+            }
+
+            word_inter[compteur] = '\0';
+
+
+
+            if(is_word_in_string(word_inter,prompt->content) == True_statement){
+                buffer[0] ='\0';
+                while(is_word_in_string(":",buffer)!= True_statement){
+                    printf("%s", buffer);
+                    fgets(buffer, 1000,streamfile);
+                }
+                found = 1;
+                break;
+
+            }
+
+
+        }
+        fgets(buffer, 1000,streamfile);
+
+    }
+    /*
+    
+    on se place jusqu'a la balise eventobject
+    
+    */
+
+    while(is_word_in_string("eventobject",buffer) == False_statement){
+        fgets(buffer, 1000,streamfile);
+    }
+    /*
+    
+    on reinitialise la basile pour eviter d'afficher la dite rebirique et cassé le 4eme mur
+    
+    */
+    buffer[0] = '\0';
+    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+        if(is_word_in_string(":",buffer) && buffer[0] !=':'){
+
+            compteur = 0;
+            while(buffer[compteur] !=':'){
+                word_inter[compteur] = buffer[compteur];
+                compteur ++;
+            }
+
+            word_inter[compteur] = '\0';
+            printf("%s\n", word_inter);
+
+            if(is_word_in_string(word_inter,prompt->content) == True_statement){
+                /*printf("I HAVE FOUND THE OBJECT MOTHERFUCKER\n");*/
+                buffer[0] ='\0';
+                compteur = 0;
+                inter_compteur =0;
+                while(buffer[compteur] != '\n'){
+                    if (buffer[compteur] == ':'){
+                        inter_buffer[inter_compteur] = '\0';
+
+                        if(is_word_in_string("description", inter_buffer)){
+                            compteur ++;
+                            while (buffer[compteur] !=':'){
+                                
+                                if(compteur_chariot == colonne){
+                                    printf("\n");
+                                    compteur_chariot =0;
+                                    if(buffer[compteur] != ' '){
+                                        printf("%c",buffer[compteur]);
+                                    }
+                                    compteur ++;
+                                    
+                                }
+                                else{
+                                    printf("%c",buffer[compteur]);
+                                    compteur ++;
+                                    compteur_chariot ++;
+                                }
+                            }
+                            printf("\n");
+                            found = 1;
+                            break;
+                        }
+                        else{
+                            inter_compteur = 0;
+                        }
+
+                    }
+                    else{
+                        inter_buffer[inter_compteur] = buffer[compteur];
+                        
+                        inter_compteur ++;
+                    }
+                    compteur ++;
+
+
+                }
+            }
+        }
+
+
+        fgets(buffer, 1000,streamfile);
+    }
+    /*
+    
+    si on a rien trouvé on le dis a l'utilisateur.
+    
+    */
+
+    if (found == 0){
+        printf("je ne crois ne pas comprendre ce que je suis censer regarder...\n");
+    }
 }
 
 
@@ -52,6 +280,11 @@ void intro_reader(){
 
 
 int fonction_deplacement(list_char * prompt){
+    /*
+    
+    fonction qui gèrent les déplacements
+
+    */
     FILE *element;
     list_char fichier_a_ouvrir;
     init_list_char(&fichier_a_ouvrir, "monde");
@@ -68,7 +301,7 @@ int fonction_deplacement(list_char * prompt){
         position[2] --;
     }
     else{
-        printf("deplacement non valide veuiller utiliser les coordonnees (n, nord...)\n");
+        printf("deplacement non valide veuiller utiliser les coordonnees (sud, nord...)\n");
         return 0;
     }
     /*
@@ -98,14 +331,75 @@ int fonction_deplacement(list_char * prompt){
     else{
         oldposition[0] = position[0];
         oldposition[1] = position[1];
+        description_reader(element);
         fclose(element);
+        
+
     }
         free_liste_char(&buffer);
         free_liste_char(&fichier_a_ouvrir);
     return 0;
 }
 
+void print_inventary(){
+    /*
+    
+    fonction qui affiche l'inventaire de l'utilisateur
+    
+    */
+    unsigned int compteur;
+    for(compteur = 0; compteur != inventaire.len; compteur ++){
+        printf("%s\n",inventaire.content[compteur].content);
+    }
+    if (compteur == 0){
+        printf("comme toujours je n'ai rien...\n");
+    }
+}
+
+
+
+
+
+
+
+
 
 void fonction_regarder(list_char * prompt){
+    /*
+    
+    fonction qui gèrent les descriptions de l'environement
+
+    */
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    init_list_char(&fichier_a_ouvrir, "monde");
+    list_char buffer;
+    init_list_char(&buffer,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+    int_translator(&buffer,world);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_char(&fichier_a_ouvrir,'/');
+    int_translator(&buffer,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_char(&fichier_a_ouvrir,',');
+    int_translator(&buffer,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    element = fopen(fichier_a_ouvrir.content,"r");
+    if (is_word_in_string("piece" , prompt->content)){
+        description_reader(element);
+        
+    }
+    else if (is_word_in_string("objet" , prompt->content) || is_word_in_string("objets" , prompt->content)){
+        print_object(element);
+    }
+    else if (is_word_in_string("inventaire", prompt->content) || is_word_in_string("moi", prompt->content) ||is_word_in_string("m\'", prompt->content)){
+        print_inventary();
+    }
+    else{
+        print_object_description(element,prompt);
+        
+    }
+    fclose(element);
 
 }
