@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
+/*#include <SDL2/SDL.h>*/
 #include "fonctionutile.h"
 #include "game_function.h"
 const int SCREEN_WIDTH = 800;
