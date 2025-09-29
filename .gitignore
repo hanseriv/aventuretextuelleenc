@@ -1,3 +1,5 @@
 *.png
 *.mp3
 compilation/*
+*.o
+aventure_c
