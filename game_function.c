@@ -749,7 +749,7 @@ void fonction_utiliser(list_char * prompt){
     char word_inter[100] = "\0";
     int compteur = 0;
     int offset = 0;
-
+    int compteur_chariot =0;
     int found = 0;
 
     /*
@@ -813,6 +813,11 @@ void fonction_utiliser(list_char * prompt){
                 word_inter[compteur] = '\0';
                 /*printf("l'objet a utilisé est : %s", word_inter);*/
                 if (is_word_in_string(word_inter, prompt->content)){
+                    /*
+                    
+                    condition remplis donc on affiche la description si on a bien utiliser le bon objet
+                    
+                    */
                     offset += compteur+1;
                     compteur = 0;
                     while(buffer[offset + compteur] !=':'){
@@ -835,16 +840,36 @@ void fonction_utiliser(list_char * prompt){
                         compteur ++;
                     }
                     compteur ++;
-                    while(buffer[compteur] != ':'){
-                        printf("%c",buffer[compteur]);
-                        compteur ++;
+                    compteur_chariot =0;
+                    while(buffer[compteur] != ':' || buffer[compteur] != '+'){
+                        if(compteur_chariot == colonne){
+                            printf("\n");
+                            compteur_chariot =0;
+                            if(buffer[compteur] != ' '){
+                                printf("%c",buffer[compteur]);
+                            }
+                            compteur ++;
+                                    
+                        }
+                        else{
+                            printf("%c",buffer[compteur]);
+                            compteur ++;
+                            compteur_chariot ++;
+                        }
                     }
                     printf("\n");
+                    if (buffer[compteur] != '+'){
+                        world ++;
+                    }
                     break;
 
                 }
                 else{
-
+                    /*
+                    
+                    sinon on affiche le prompt associer a la mauvaise utilisation de l'objet...
+                    
+                    */
                     compteur =0;
                     while(buffer[compteur] != '('){
                         compteur ++;
@@ -853,10 +878,22 @@ void fonction_utiliser(list_char * prompt){
                         compteur ++;
                     }
                     compteur ++;
+                    compteur_chariot =0;
                     while(buffer[compteur] != ':'){
-                        printf("%c",buffer[compteur]);
-                        compteur ++;
-                    }
+                        if(compteur_chariot == colonne){
+                            printf("\n");
+                            compteur_chariot =0;
+                            if(buffer[compteur] != ' '){
+                                printf("%c",buffer[compteur]);
+                            }
+                            compteur ++;
+                                    
+                        }
+                        else{
+                            printf("%c",buffer[compteur]);
+                            compteur ++;
+                            compteur_chariot ++;
+                        }
                     printf("\n");
                     break;
                 }
