@@ -797,6 +797,7 @@ void fonction_utiliser(list_char * prompt){
             }
 
             word_inter[compteur] = '\0';
+            /*printf("l'element trouvé est : %s", word_inter);*/
             if (is_word_in_string(word_inter, prompt->content)){
                 /*
                 
@@ -805,20 +806,23 @@ void fonction_utiliser(list_char * prompt){
                 */
 
                 found = 1;
-                offset = compteur;
+                offset = compteur +1;
                 compteur = 0;
                 while(buffer[offset + compteur] !=':'){
                     word_inter[compteur] = buffer[offset + compteur];
                     compteur ++;
                 }
                 word_inter[compteur] = '\0';
+                /*printf("l'objet a utilisé est : %s", word_inter);*/
                 if (is_word_in_string(word_inter, prompt->content)){
-                    offset += compteur;
+                    offset += compteur+1;
                     compteur = 0;
                     while(buffer[offset + compteur] !=':'){
                         word_inter[compteur] = buffer[offset + compteur];
                         compteur ++;
                     }
+                    word_inter[compteur] = '\0';
+                    printf("l'evenement est : %s", word_inter);
                     append_charptr(&event,word_inter);
                     append_str(&evenement,&event);
                     compteur = 0;
