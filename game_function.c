@@ -411,7 +411,7 @@ int fonction_deplacement(list_char * prompt){
     */
     FILE *element;
     list_char fichier_a_ouvrir;
-    init_list_char(&fichier_a_ouvrir, "monde");
+
     if (is_word_in_string("nord",prompt->content)){
         position[0] ++;
     }
@@ -575,7 +575,6 @@ void fonction_prendre(list_char * prompt){
 
     FILE *element;
     list_char fichier_a_ouvrir;
-    init_list_char(&fichier_a_ouvrir, "monde");
     list_char buffer;
     init_list_char(&buffer,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
@@ -672,7 +671,7 @@ void fonction_parler(list_char * prompt){
   
     FILE *element;
     list_char fichier_a_ouvrir;
-    init_list_char(&fichier_a_ouvrir, "monde");
+
     list_char buffer_fichier;
     init_list_char(&buffer_fichier,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
@@ -760,7 +759,6 @@ void fonction_utiliser(list_char * prompt){
     */
     FILE *element;
     list_char fichier_a_ouvrir;
-    init_list_char(&fichier_a_ouvrir, "monde");
     list_char buffer_fichier;
     list_char event;
     init_list_char(&event,"");
@@ -822,7 +820,7 @@ void fonction_utiliser(list_char * prompt){
                         compteur ++;
                     }
                     word_inter[compteur] = '\0';
-                    printf("l'evenement est : %s", word_inter);
+                    printf("l'evenement est : %s\n", word_inter);
                     append_charptr(&event,word_inter);
                     append_str(&evenement,&event);
                     compteur = 0;

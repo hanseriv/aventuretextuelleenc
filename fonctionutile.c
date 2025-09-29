@@ -40,17 +40,14 @@ void free_liste_string(list_string *matrice){
         par la structure une fois que celle-ci a finie d'etre utilisé
     */
     unsigned int longueur = 0;
-    if(matrice->len != 0){
-        while (longueur != matrice->len-1){
+    if(matrice->content != NULL){
+        while (longueur != matrice->len){
             free_liste_char(&matrice->content[longueur]);
             longueur ++;
         }
+        free(matrice->content);
     }
-    else{
-        free_liste_char(&matrice->content[0]);
-        
-    }
-    free(matrice->content);
+    
 }
 
 int is_the_char_the_same(list_char phrase1, list_char phrase2){
@@ -102,12 +99,13 @@ void append_charptr(list_char *phrase, char *aajouter){
         append_char(phrase,aajouter[compteur]);
         compteur ++;
     }
+    printf("%s\n", phrase->content);
 }
 
 
 void init_list_string(list_string *str_a_init){
     str_a_init->content = malloc(1* sizeof(list_char ));
-    str_a_init->len = 0;
+    str_a_init->len = 1;
     init_list_char(&str_a_init->content[0],"");
 }
 
@@ -120,7 +118,7 @@ void init_list_char(list_char *phrase, char *acopie){
     */
     unsigned int longueur = len_string(acopie);
     phrase->len = longueur;
-    phrase->content = malloc((longueur + 1)*sizeof(char));
+    phrase->content = malloc((longueur + 2)*sizeof(char));
     copieur_str(phrase->content,acopie);
 }
 
@@ -169,6 +167,7 @@ void copieur_str(char * tocopie, char * a_copier){
         tocopie[compteur] = a_copier[compteur];
         compteur ++;
     }
+    tocopie[compteur] = '\0';
 }
 
 
@@ -308,13 +307,29 @@ void int_translator(list_char * prompt,int a_traduire){
 
 int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
     unsigned int compteur =0;
+    print_list_string(ou_chercher);
     if(ou_chercher->len != 0){
-    while(compteur != ou_chercher->len){
-        if (is_word_in_string(achercher, ou_chercher->content[compteur].content)){
-            return True_statement;
+        while(compteur != ou_chercher->len){
+            if (is_word_in_string(ou_chercher->content[compteur].content,achercher )){
+                return True_statement;
+            }
+            compteur ++;
         }
-        compteur ++;
-    }
     }  
     return False_statement;
+}
+
+
+
+void print_list_string(list_string * list){
+    unsigned int compteur = 0;
+    printf("evenement que le joueur a rencontrer : \n");
+    while (compteur != list->len){
+        printf("%sEND\n", list->content[compteur].content);
+        compteur ++;
+    }
+    printf("END EVENT \n");
+
+
+
 }
