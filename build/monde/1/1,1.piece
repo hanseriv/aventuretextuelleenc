@@ -35,7 +35,7 @@ Je n'ai plus mal a la tête mais je suis las...
 END_PNJ
 
 eventobject:
-lit:drap:fin:description:Il semble que son appelle est plus fort que votre envie de vivre... Même si vos cauchemars vous terrifient, ils vous semblent plus familiers que la vie que l'on vous force à mener:(nonefound):Cela ne semble pas vous appartez confort...:(iffound):Une fois de plus vous avez choisi la fuite...:
+lit:drap:fin:description:Il semble que son appelle est plus fort que votre envie de vivre... Même si vos cauchemars vous terrifient, ils vous semblent plus familiers que la vie que l'on vous force à mener:(nonefound):Cela ne semble pas vous appartez confort...:(iffound):Une fois de plus vous avez choisi la fuite...*:
 END_EVENT
 
 conditionentre:

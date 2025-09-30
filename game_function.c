@@ -8,6 +8,18 @@
 extern list_string inventaire, objetdisponible, evenement;
 extern int position[], oldposition[];
 extern int world, oldworld,error;
+extern short victory;
+
+void clear_func(void){
+
+    int compteur = 0;
+    while(compteur != 1000){
+        printf("\n");
+        compteur ++;
+    }
+}
+
+
 
 void waiting(){
     /*
@@ -876,7 +888,7 @@ void fonction_utiliser(list_char * prompt){
                     }
                     compteur ++;
                     compteur_chariot =0;
-                    while(buffer[compteur] != ':' && buffer[compteur] != '+'){
+                    while(buffer[compteur] != ':' && buffer[compteur] != '+'&& buffer[compteur] != '*'){
                         /*
                         
                         on affiche le message jusqu'a attendre le marqueur de fin de message
@@ -910,6 +922,15 @@ void fonction_utiliser(list_char * prompt){
                         
                         */
                         world ++;
+                        waiting();
+                    }
+                    if (buffer[compteur] == '*'){
+                        /*
+                        
+                        si on a comme marque de fin '+' on augmente le monde dans le quel le joueur évolue
+                        
+                        */
+                        victory ++;
                         waiting();
                     }
                     break;

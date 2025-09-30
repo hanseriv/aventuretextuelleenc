@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-/*#include <SDL2/SDL.h>*/
+#include "illustrator.h"
 #include "fonctionutile.h"
 #include "game_function.h"
 const int SCREEN_WIDTH = 800;
@@ -12,6 +12,7 @@ int oldposition[] = {1,1};
 int world = 0;
 int oldworld = -1;
 int error = 0;
+short victory = 0;
 
 
 
@@ -30,7 +31,6 @@ int jeu(){
     list_char fichier_a_ouvrir;
     list_char buffer;
     FILE  *element;
-    int compteur;
     init_list_string(&inventaire);
     init_list_string(&objetdisponible);
     init_list_string(&evenement);
@@ -39,6 +39,8 @@ int jeu(){
     init_list_char(&prompt,"");
     do{
         if(world != oldworld){
+            clear_func();
+            print_logo();
             free_liste_string(&inventaire);
             free_liste_string(&objetdisponible);
             free_liste_string(&evenement);
@@ -82,11 +84,7 @@ int jeu(){
             fonction qui "efface" le texte...
 
             */
-            compteur = 0;
-            while(compteur != 1000){
-                printf("\n");
-                compteur ++;
-            }
+            clear_func();
         }
         else if(is_word_in_string("regarder", prompt.content) ||is_word_in_string("inspecter", prompt.content) ){
             fonction_regarder(&prompt);
@@ -129,6 +127,10 @@ int jeu(){
             
             */
             printf("unrecognise expression : %s\n", prompt.content);
+        }
+        if(victory !=0 ){
+            printf("voici la fin de votre experience...\nen esperant que tout ce soit bien passer...\n");
+            break;
         }
 
         if (error == 1){
