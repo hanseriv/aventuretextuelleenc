@@ -56,10 +56,11 @@ int is_the_char_the_same(list_char phrase1, list_char phrase2){
         compare les deux string et retourne False_statement si elle sont différente
         et True_statement dans le cas contraire
     */
+    unsigned int compteur = 0;
     if (phrase1.len != phrase2.len){
         return 0;
     }
-    unsigned int compteur = 0;
+    
     while(compteur <= phrase1.len){
         if (phrase1.content[compteur] != phrase2.content[compteur]){
             return 0;
@@ -99,7 +100,7 @@ void append_charptr(list_char *phrase, char *aajouter){
         append_char(phrase,aajouter[compteur]);
         compteur ++;
     }
-    printf("%s\n", phrase->content);
+
 }
 
 
@@ -138,11 +139,15 @@ void append_stringchar(list_char *aretourner, list_char *aajouter){
 
 
 void append_str(list_string *matrice, list_char *phrase){
-
+    if (matrice->len != 1){
     matrice->len++;
     matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char));  
     init_list_char(&matrice->content[matrice->len - 1 ], "");
     append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
+    }
+    else{
+        append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
+    }
 }
 
 
@@ -173,9 +178,10 @@ void copieur_str(char * tocopie, char * a_copier){
 
 void stringtoliste(list_string *matrice_retourner,list_char *phrase){
     list_char mot;
+    unsigned int compteur = 0;
     mot.content = malloc(sizeof(char));
     matrice_retourner->content = malloc(sizeof(list_char));
-    unsigned int compteur = 0;
+    
     while(compteur <= phrase->len)
     {
         if (phrase->content[compteur] != ' ')
@@ -279,12 +285,13 @@ void translation(list_char *prompt, char a_rajouter){
 void int_translator(list_char * prompt,int a_traduire){
     
     int signe = 0;
+    int translator;
     if (a_traduire < 0){
         a_traduire = -a_traduire;
         signe ++;
     }
 
-    int translator = a_traduire;
+    translator = a_traduire;
     reec_list_char(prompt);
     append_char(prompt,'\0');
     if(translator != 0){
@@ -307,7 +314,6 @@ void int_translator(list_char * prompt,int a_traduire){
 
 int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
     unsigned int compteur =0;
-    print_list_string(ou_chercher);
     if(ou_chercher->len != 0){
         while(compteur != ou_chercher->len){
             if (is_word_in_string(ou_chercher->content[compteur].content,achercher )){
@@ -323,13 +329,10 @@ int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
 
 void print_list_string(list_string * list){
     unsigned int compteur = 0;
-    printf("evenement que le joueur a rencontrer : \n");
     while (compteur != list->len){
-        printf("%sEND\n", list->content[compteur].content);
+        printf("%s\n", list->content[compteur].content);
         compteur ++;
     }
-    printf("END EVENT \n");
-
 
 
 }

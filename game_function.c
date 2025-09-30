@@ -28,7 +28,7 @@ void is_there_room_around_you(){
     FILE *element;
     list_char fichier_a_ouvrir;
     list_char buffer_fichier;
-    init_list_char(&fichier_a_ouvrir, "monde");
+
     
     init_list_char(&buffer_fichier,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
@@ -119,8 +119,9 @@ void intro_reader(){
     FILE  *element;
     list_char fichier_a_ouvrir;
     list_char buffer;
-    oldworld = world;
     char buffer_c ='\0';
+    oldworld = world;
+    
     init_list_char(&buffer,"");
     init_list_char(&fichier_a_ouvrir, "./monde/");
     int_translator(&buffer,world);
@@ -152,9 +153,9 @@ void description_reader(FILE * streamfile){
     fonction qui lie automatiquement les descriptions des pieces
     
     */
-    char buffer[1000] ="";
+    char buffer[10000] ="";
     while(is_word_in_string("description",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     
 
@@ -163,18 +164,18 @@ void description_reader(FILE * streamfile){
         
         printf("%s",buffer);
         
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
 
 
 }
 
 void print_object(FILE * streamfile){
-    char buffer[1000] = "\0";
+    char buffer[10000] = "\0";
     char word_inter[100]= "\0" ;
     int compteur = 0;
     while(is_word_in_string("objet",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     buffer[0] = '\0';
     printf("dans la pièce il y a :\n");
@@ -199,11 +200,11 @@ void print_object(FILE * streamfile){
 
             
         }
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     buffer[0] = '\0';
     while(is_word_in_string("END_EVENT",buffer) == False_statement){
@@ -215,14 +216,14 @@ void print_object(FILE * streamfile){
             }
             printf("\n");
         }
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
 
 }
 
 void print_object_description(FILE * streamfile,list_char * prompt){
-    char buffer[1000] ="\0";
-    char inter_buffer[20] = "";
+    char buffer[10000] ="\0";
+    char inter_buffer[100] = "";
     char word_inter[100] ="\0" ;
     int compteur = 0;
     int inter_compteur =0;
@@ -236,7 +237,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
     */
 
     while(is_word_in_string("objet",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     /*
     
@@ -293,7 +294,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
     */
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     /*
     
@@ -362,7 +363,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
         }
 
 
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     /*
     
@@ -383,16 +384,16 @@ int can_i_enter(FILE * filestream){
     fonction qui teste si l'on a tous les evenements necessaires pour passer une porte
     
     */
-    char buffer[1000] = "";
+    char buffer[10000] = "";
     while(is_word_in_string("conditionentre", buffer) == False_statement){
-        fgets(buffer,1000,filestream);
+        fgets(buffer,10000,filestream);
     }
     buffer[0] ='\0';
     while(is_word_in_string("END_COND", buffer) == False_statement){
         if(is_a_string_in_list_string(buffer,&evenement) == False_statement && buffer[0] !='\0'){
                 return False_statement;
         }
-        fgets(buffer,1000,filestream);
+        fgets(buffer,10000,filestream);
         
     }
 
@@ -411,6 +412,7 @@ int fonction_deplacement(list_char * prompt){
     */
     FILE *element;
     list_char fichier_a_ouvrir;
+    list_char buffer;
 
     if (is_word_in_string("nord",prompt->content)){
         position[0] ++;
@@ -431,7 +433,7 @@ int fonction_deplacement(list_char * prompt){
     /*
         on ouvre le fichier du niveau correspondant
     */
-    list_char buffer;
+    
     init_list_char(&buffer,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
     int_translator(&buffer,world);
@@ -497,14 +499,15 @@ void took(FILE * streamfile, list_char * prompt){
     fonction qui vérifie si l'utilisateur peut prendre l'objet 
 
     */
-    char buffer[1000] = "\0";
+    char buffer[10000] = "";
     list_char buffer_obj ;
-    init_list_char(&buffer_obj,"");
-    char word_inter[20] = "\0";
+    char word_inter[100] = "\0";
     int found = 0;
     int compteur = 0;
+    init_list_char(&buffer_obj,"");
+    
     while(is_word_in_string("objet",buffer) == False_statement){
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
     }
     buffer[0] = '\0';
     while(is_word_in_string("END_OBJ",buffer) == False_statement){
@@ -523,7 +526,7 @@ void took(FILE * streamfile, list_char * prompt){
             if(is_word_in_string(word_inter,prompt->content) == True_statement && is_a_string_in_list_string(word_inter,&inventaire) == False_statement){
                 buffer[0] ='\0';
                 while(is_word_in_string(":",buffer)!= True_statement){
-                    fgets(buffer, 1000,streamfile);
+                    fgets(buffer, 10000,streamfile);
                 }
                 if (is_word_in_string("1",buffer) == True_statement)
                 {
@@ -542,7 +545,7 @@ void took(FILE * streamfile, list_char * prompt){
 
 
         }
-        fgets(buffer, 1000,streamfile);
+        fgets(buffer, 10000,streamfile);
 
     }
     if (found == 0){
@@ -616,8 +619,8 @@ void fonction_regarder(list_char * prompt){
 
     FILE *element;
     list_char fichier_a_ouvrir;
-    init_list_char(&fichier_a_ouvrir, "monde");
     list_char buffer;
+    
     init_list_char(&buffer,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
     int_translator(&buffer,world);
@@ -662,7 +665,7 @@ void fonction_regarder(list_char * prompt){
 
 
 void fonction_parler(list_char * prompt){
-    char buffer[1000] = "\0";
+    char buffer[10000] = "\0";
 
     char word_inter[100] = "\0";
     int compteur = 0;
@@ -693,7 +696,7 @@ void fonction_parler(list_char * prompt){
     else{
         
     while(is_word_in_string("pnj",buffer) == False_statement){
-        fgets(buffer, 1000,element);
+        fgets(buffer, 10000,element);
     }
     /*
     
@@ -718,7 +721,7 @@ void fonction_parler(list_char * prompt){
                 buffer[0] ='\0';
                 while(is_word_in_string(":",buffer)!= True_statement){
                     printf("%s", buffer);
-                    fgets(buffer, 1000,element);
+                    fgets(buffer, 10000,element);
                 }
                 found = 1;
                 break;
@@ -729,7 +732,7 @@ void fonction_parler(list_char * prompt){
 
 
         }
-        fgets(buffer, 1000,element);
+        fgets(buffer, 10000,element);
 
     }
     if(found == 0){
@@ -744,23 +747,34 @@ void fonction_parler(list_char * prompt){
 
 
 void fonction_utiliser(list_char * prompt){
-    char buffer[1000] = "\0";
+    char buffer[10000] = "\0";
 
     char word_inter[100] = "\0";
     int compteur = 0;
     int offset = 0;
     int compteur_chariot =0;
     int found = 0;
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    list_char buffer_fichier;
+    list_char event;
 
+
+    while (compteur != (int)inventaire.len){
+        if(is_word_in_string(inventaire.content[compteur].content,prompt->content) || inventaire.content[compteur].content[0] != '\0'){
+            found = 1;
+        }
+
+        compteur ++;
+    }
     /*
     
         création du stream
     
     */
-    FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer_fichier;
-    list_char event;
+   if(found == 1){
+    found = 0;
+    
     init_list_char(&event,"");
     init_list_char(&buffer_fichier,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
@@ -782,7 +796,7 @@ void fonction_utiliser(list_char * prompt){
 
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
-        fgets(buffer, 1000,element);
+        fgets(buffer, 10000,element);
     }
     buffer[0] ='\0';
 
@@ -825,24 +839,48 @@ void fonction_utiliser(list_char * prompt){
                         compteur ++;
                     }
                     word_inter[compteur] = '\0';
-                    printf("l'evenement est : %s\n", word_inter);
                     append_charptr(&event,word_inter);
                     append_str(&evenement,&event);
                     compteur = 0;
                     while(buffer[compteur] != '('){
+                        /*
+                        
+                        on cherche le premier marqueur soit :(nonefound)
+
+                        */
                         compteur ++;
                     }
                     compteur ++;
                     while(buffer[compteur] != '('){
+                        /*
+                        
+                        on cherche le deuxieme marqueur soit :(iffound)
+
+                        */
                         compteur ++;
                     }
                     while(buffer[compteur] != ':'){
+                        /*
+                        
+                        on se place a début de ce que l'on est censer montrer
+                        
+                        */
                         compteur ++;
                     }
                     compteur ++;
                     compteur_chariot =0;
-                    while(buffer[compteur] != ':' || buffer[compteur] != '+'){
+                    while(buffer[compteur] != ':' && buffer[compteur] != '+'){
+                        /*
+                        
+                        on affiche le message jusqu'a attendre le marqueur de fin de message
+                        
+                        */
                         if(compteur_chariot == colonne){
+                            /*
+                            
+                            avec cette boucle on s'assure que le message soit plus lisible
+                            
+                            */
                             printf("\n");
                             compteur_chariot =0;
                             if(buffer[compteur] != ' '){
@@ -858,7 +896,12 @@ void fonction_utiliser(list_char * prompt){
                         }
                     }
                     printf("\n");
-                    if (buffer[compteur] != '+'){
+                    if (buffer[compteur] == '+'){
+                        /*
+                        
+                        si on a comme marque de fin '+' on augmente le monde dans le quel le joueur évolue
+                        
+                        */
                         world ++;
                     }
                     break;
@@ -872,9 +915,19 @@ void fonction_utiliser(list_char * prompt){
                     */
                     compteur =0;
                     while(buffer[compteur] != '('){
+                        /*
+                        
+                        ici on se place au marqueur (nonefound)
+                        
+                        */
                         compteur ++;
                     }
                     while(buffer[compteur] != ':'){
+                        /*
+                        
+                        puis on se place au début de la 
+                        
+                        */
                         compteur ++;
                     }
                     compteur ++;
@@ -904,16 +957,21 @@ void fonction_utiliser(list_char * prompt){
 
 
             }
-            fgets(buffer, 1000,element);
     
-        } 
+        }
+        fgets(buffer, 10000,element);
+    } 
     if(found == 0){
         printf("je ne suis pas sur de comprendre l'objet que je suis censer saisir...\n");
     }
-
+    
 
     fclose(element);
     free_liste_char(&fichier_a_ouvrir);
     free_liste_char(&buffer_fichier);
     free_liste_char(&event);
+    }
+    else{
+        printf("suis-je censer materialiser l'objet et l\'utiliser ?\n");
+    }
 }
