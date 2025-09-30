@@ -43,7 +43,7 @@ j'ai mal a la tête...
 END_PNJ
 
 eventobject:
-porte:cle:eventouvertporte1:description:c'est une vieille porte orientée vers le nord, elle semble pour temps résister à votre main. Mais où avez vous bien pu mettre cette fichu clé... Qu'avez vous caché... En avez vous peur ?:(nonefound):je ne suis pas sur que c'était une bonne idée...:(iffound): la porte s'ouvre dans un grincement sans nom: 
+porte:cle:eventouvertporte1:description:c'est une vieille porte orientée vers le nord, elle semble pour temps résister à votre main. Mais où avez vous bien pu mettre cette fichu clé... Qu'avez vous caché... En avez vous peur ?:(nonefound):je ne suis pas sur que c'était une bonne idée...:(iffound):la porte s'ouvre dans un grincement sans nom: 
 END_EVENT
 
 conditionentre:

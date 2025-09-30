@@ -393,7 +393,6 @@ int can_i_enter(FILE * filestream){
 
         if(buffer[0] !='\0'){
             buffer[len_string(buffer)-2]= '\0';
-            printf("%sstop\n",buffer);
             if(is_a_string_in_list_string(buffer,&evenement) == False_statement){return False_statement;} 
                 
         }
