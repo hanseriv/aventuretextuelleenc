@@ -13,7 +13,7 @@ extern short victory;
 void clear_func(void){
 
     int compteur = 0;
-    while(compteur != 1000){
+    while(compteur != 2000){
         printf("\n");
         compteur ++;
     }

@@ -1,0 +1,35 @@
+description:
+/*
+    texte de description...
+*/
+END_DESC
+
+objet:
+nom_d_objet:
+/*
+    texte de description...
+*/
+: 1 <- objet que l'on peut saisir
+nom_d_objet_2:
+/*
+    texte de description...
+*/
+: 2 <- objet que l'on ne peut pas saisir
+END_OBJ
+
+pnj:
+nom_de_personne: 
+/*
+    texte de description...
+*/
+: <- marqueur de fin de dialogue;
+END_PNJ
+
+eventobject:
+nom_de_l_objet:nom_de_l_objet_avec_lequelle_on_doit_interragir:event_a_donner_si_reussite:description:/*description de l'objet*/:(nonefound):/* description si pas le bon objet est utilisé*/:(iffound):/*description si le bon objet est utilisé*/+:
+                                                                                          /î balise le nom n'est pas génerique/                                                                                                                    Î marqueur de fin(':' <- il ne se passe rien,'+' <- on change de monde,'*' <- on met fin au jeu);
+END_EVENT
+
+conditionentre:
+condition_pour_rentrer_dans_la_piece
+END_COND
