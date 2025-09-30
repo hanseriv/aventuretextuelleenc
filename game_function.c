@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "fonctionutile.h"
-
+#include "extended_game_function.h"
 #define colonne 90
+
 
 
 extern list_string inventaire, objetdisponible, evenement;
@@ -655,6 +656,10 @@ void fonction_regarder(list_char * prompt){
     }
     else if (is_word_in_string("piece" , prompt->content)){
         description_reader(element);
+        
+    }
+    else if (is_word_in_string("passant" , prompt->content) || is_word_in_string("personnes" , prompt->content)){
+        print_pnj(element);
         
     }
     else if (is_word_in_string("objet" , prompt->content) || is_word_in_string("objets" , prompt->content)){

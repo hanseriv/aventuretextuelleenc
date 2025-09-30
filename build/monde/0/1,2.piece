@@ -1,43 +1,43 @@
+type room
 description:
-Vous semblez être dans une pièce à manger mais tout est délabré... 
-Que pensiez vous accomplir ? Est-ce de la douleur ? De la peine ?
+il semblerait que cette piece soit hors du temps...
+vous sentez une presence...
+cela ne vous rassure pas...
+d'un pas pressant vous avancer mais...
 END_DESC
 
+
+ennemy: 2
+lost_one: 
+vous voyez une ombre qui se place devant vous,
+elle n'a pas l'air menaçante...
+mais vous ne vous sentez pas bien...
+elle ne doit pas vous arreter
+:
+soldat_perdu:
+il semblerait que vos demon refasse surface une fois de plus...
+allez-vous encore fuire ?
+:
+END_ENNEMY
+
+VICTORY:
+vous arrivez a vous en sortir...
+cela n'a pas été chose aisé
+mais vous avez ce que vous deviez faire...
+n'est-ce pas ?
+ENDVIC
+
+FUITE:
+vous etes essoufflé...
+votre course effraine, l'adrenaline...
+mais pourtant il n'a pas bouger comme s'il ne cherchait
+meme pas a vous combattre...
+etait-ce par sympathie...
+vous avez encore une fois reussi a fuir...
+ENDFUI
+
 objet:
-sol:
-Le sol... Ou plutôt ce qu'il en reste... 
-Les planches semblent vouloir se séparer 
-de ce corps corrompu, cela fait combien de 
-temps que vous n'avez reçu de la visite ? 
-: 2
-chaise:
-Il n'y rien qui ne vous incite à vous 
-assoir dessus... Mais avez vous simplement 
-songé à les remplacer ? 
-: 2
-tableau:
-Ils semblent vous percer à jour... 
-Pourquoi vous infligez vous autant de peine... 
-: 2
-television:
-S'il y a un objet qui vous donne espoir, 
-ce dernier n'est pas ici... 
-: 2
-cle:
-Une veille clé se tiens sur votre table... 
-Mais vous avez oublié en quoi elle vous sera utile... 
-: 1
-
 END_OBJ
-
-pnj:
-banner: 
-Bordel, il est déprimant ce jeu...
-:
-moi: 
-je crois que cela ne vaut pas la peine de vivre ainsi...
-:
-END_PNJ
 
 eventobject:
 END_EVENT

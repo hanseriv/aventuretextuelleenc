@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "illustrator.h": "c",
+        "extended_game_function.h": "c"
     }
 }

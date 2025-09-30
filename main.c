@@ -3,8 +3,6 @@
 #include "illustrator.h"
 #include "fonctionutile.h"
 #include "game_function.h"
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 800;
 
 list_string inventaire, objetdisponible, evenement;
 int position[] = {1,1};
@@ -69,6 +67,8 @@ int jeu(void){
         printf(":>");
         input(&prompt);
         
+
+        
         if(is_word_in_string("aller",prompt.content))        
         {
             /*
@@ -77,6 +77,8 @@ int jeu(void){
 
             */
             fonction_deplacement(&prompt);
+
+
         }
         else if(is_word_in_string("clear", prompt.content)){
             /*
@@ -87,7 +89,25 @@ int jeu(void){
             clear_func();
         }
         else if(is_word_in_string("regarder", prompt.content) ||is_word_in_string("inspecter", prompt.content) ){
+
+
             fonction_regarder(&prompt);
+
+
+        }
+        else if(is_word_in_string("sauter", prompt.content)||is_word_in_string("franchir", prompt.content)){
+
+
+            sauter_function(&prompt);
+
+
+        }
+        else if(is_word_in_string("ouvrir", prompt.content)){
+
+
+            ouvrir_coffre_ou_porte(&prompt);
+
+
         }
         else if(is_word_in_string("exit",prompt.content)){
             /*
@@ -98,6 +118,7 @@ int jeu(void){
             break;
         }
         else if(is_word_in_string("prendre",prompt.content)){
+
 
             fonction_prendre(&prompt);
 
@@ -120,6 +141,7 @@ int jeu(void){
             print_list_string(&evenement);
 
         }
+
         else{
             /*
             
@@ -128,6 +150,8 @@ int jeu(void){
             */
             printf("unrecognise expression : %s\n", prompt.content);
         }
+
+
         if(victory !=0 ){
             printf("voici la fin de votre experience...\nen esperant que tout ce soit bien passer...\n");
             break;

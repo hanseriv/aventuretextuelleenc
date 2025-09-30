@@ -69,4 +69,6 @@ int len_string(char *str);
 int is_a_string_in_list_string(char * achercher, list_string * ou_chercher);
 
 void print_list_string(list_string * list);
+
+int is_the_char_ptr_shwoing_the_samething(char *phrase1, char *phrase2);
 #endif 

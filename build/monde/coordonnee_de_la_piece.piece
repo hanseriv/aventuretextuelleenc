@@ -1,3 +1,6 @@
+type (room/combat)
+
+
 description:
 /*
     texte de description...
