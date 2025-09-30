@@ -276,7 +276,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
             }
             else if(is_a_string_in_list_string(word_inter,&inventaire)) {
                 found =1;
-                printf("j\'ai pris cet objet...\n");
+                printf("j\'ai déjà pris cet objet...\n");
                 break;
             }
 
@@ -390,8 +390,12 @@ int can_i_enter(FILE * filestream){
     }
     buffer[0] ='\0';
     while(is_word_in_string("END_COND", buffer) == False_statement){
-        if(is_a_string_in_list_string(buffer,&evenement) == False_statement && buffer[0] !='\0'){
-                return False_statement;
+
+        if(buffer[0] !='\0'){
+            buffer[len_string(buffer)-2]= '\0';
+            printf("%sstop\n",buffer);
+            if(is_a_string_in_list_string(buffer,&evenement) == False_statement){return False_statement;} 
+                
         }
         fgets(buffer,10000,filestream);
         
@@ -761,7 +765,7 @@ void fonction_utiliser(list_char * prompt){
 
 
     while (compteur != (int)inventaire.len){
-        if(is_word_in_string(inventaire.content[compteur].content,prompt->content) || inventaire.content[compteur].content[0] != '\0'){
+        if(is_word_in_string(inventaire.content[compteur].content,prompt->content) && inventaire.content[compteur].content[0] != '\0'){
             found = 1;
         }
 
@@ -778,12 +782,16 @@ void fonction_utiliser(list_char * prompt){
     init_list_char(&event,"");
     init_list_char(&buffer_fichier,"");
     init_list_char(&fichier_a_ouvrir, "monde/");
+
+
     int_translator(&buffer_fichier,world);
     append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
     append_char(&fichier_a_ouvrir,'/');
+
     int_translator(&buffer_fichier,position[0]);
     append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
     append_char(&fichier_a_ouvrir,',');
+
     int_translator(&buffer_fichier,position[1]);
     append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
     append_charptr(&fichier_a_ouvrir, ".piece");
@@ -826,7 +834,7 @@ void fonction_utiliser(list_char * prompt){
                 }
                 word_inter[compteur] = '\0';
                 /*printf("l'objet a utilisé est : %s", word_inter);*/
-                if (is_word_in_string(word_inter, prompt->content)){
+                if (is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == False_statement){
                     /*
                     
                     condition remplis donc on affiche la description si on a bien utiliser le bon objet
@@ -903,7 +911,18 @@ void fonction_utiliser(list_char * prompt){
                         
                         */
                         world ++;
+                        waiting();
                     }
+                    break;
+
+                }
+                else if(is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == True_statement){
+                    /*
+                    
+                    si on utilise le bon objet mais l'on a déjà fais l'event...
+                    
+                    */
+                    printf("je crois que je deviens fous a  tous faire en double...\n");
                     break;
 
                 }
@@ -920,6 +939,7 @@ void fonction_utiliser(list_char * prompt){
                         ici on se place au marqueur (nonefound)
                         
                         */
+                     
                         compteur ++;
                     }
                     while(buffer[compteur] != ':'){
@@ -928,6 +948,7 @@ void fonction_utiliser(list_char * prompt){
                         puis on se place au début de la 
                         
                         */
+                       
                         compteur ++;
                     }
                     compteur ++;
@@ -947,9 +968,11 @@ void fonction_utiliser(list_char * prompt){
                             compteur ++;
                             compteur_chariot ++;
                         }
+                    
+                    
+                    }
                     printf("\n");
                     break;
-                }
 
             }
 

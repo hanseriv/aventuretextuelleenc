@@ -139,15 +139,10 @@ void append_stringchar(list_char *aretourner, list_char *aajouter){
 
 
 void append_str(list_string *matrice, list_char *phrase){
-    if (matrice->len != 1){
+    append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
     matrice->len++;
     matrice->content = realloc(matrice->content, (matrice->len) * sizeof(list_char));  
     init_list_char(&matrice->content[matrice->len - 1 ], "");
-    append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
-    }
-    else{
-        append_stringchar(&matrice->content[matrice->len - 1 ], phrase);
-    }
 }
 
 
@@ -312,11 +307,35 @@ void int_translator(list_char * prompt,int a_traduire){
 }
 
 
+int is_the_char_ptr_shwoing_the_samething(char *phrase1, char *phrase2){
+    /*
+        entrée : list_char phrase1 et list_phrase2
+        compare les deux string et retourne False_statement si elle sont différente
+        et True_statement dans le cas contraire
+    */
+     int compteur = 0;
+    if (len_string(phrase1) != len_string(phrase1) ){
+        return 0;
+    }
+    
+    while(compteur <= len_string(phrase1)){
+        if (phrase1[compteur] != phrase2[compteur]){
+            return 0;
+        }
+        compteur ++;
+    }
+    return 1;
+}
+
+
+
+
+
 int is_a_string_in_list_string(char * achercher, list_string * ou_chercher){
     unsigned int compteur =0;
     if(ou_chercher->len != 0){
         while(compteur != ou_chercher->len){
-            if (is_word_in_string(ou_chercher->content[compteur].content,achercher )){
+            if (is_the_char_ptr_shwoing_the_samething(ou_chercher->content[compteur].content,achercher )){
                 return True_statement;
             }
             compteur ++;

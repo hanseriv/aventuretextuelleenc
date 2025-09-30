@@ -39,6 +39,12 @@ int jeu(){
     init_list_char(&prompt,"");
     do{
         if(world != oldworld){
+            free_liste_string(&inventaire);
+            free_liste_string(&objetdisponible);
+            free_liste_string(&evenement);
+            init_list_string(&inventaire);
+            init_list_string(&objetdisponible);
+            init_list_string(&evenement);
             intro_reader();
             position[0] =1;
             position[1] =1;
@@ -107,6 +113,13 @@ int jeu(){
         else if(is_word_in_string("utiliser",prompt.content) || is_word_in_string("mettre",prompt.content)){
 
             fonction_utiliser(&prompt);
+
+        }
+        else if(is_word_in_string("debug",prompt.content)){
+            printf("l'inventaire :\n");
+            print_list_string(&inventaire);
+            printf("les event:\n");
+            print_list_string(&evenement);
 
         }
         else{

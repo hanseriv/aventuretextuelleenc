@@ -8,6 +8,10 @@ END_DESC
 
 objet:
 
+tableau:
+la guerre a pris pour vous beaucoup, 
+il serait temps pour vous de faire le deuil 
+: 2
 table:
 rien ne vous alarme la table est vieille 
 et vous n'oseriez jamais manger dessus 
@@ -16,10 +20,6 @@ lampe:
 elle vous éclaire le peu de vie que concentre ce monde... 
 Peut-être que la prendre vous rechauferra le coeur... 
 : 1
-tableau:
-la guerre a pris pour vous beaucoup, 
-il serait temps pour vous de faire le deuil 
-: 2
 lit:
 votre lit est vieux et pourri, 
 les lattes sont craquées de toutes parts 
