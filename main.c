@@ -26,7 +26,7 @@ short victory = 0;
 
 
 
-int jeu(){
+int jeu(void){
     list_char prompt;
     list_char fichier_a_ouvrir;
     list_char buffer;
@@ -161,7 +161,7 @@ int jeu(){
 
 
 
-int main()
+int main(void)
 {
     jeu();
     /*

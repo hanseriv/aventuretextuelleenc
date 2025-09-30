@@ -21,7 +21,7 @@ void clear_func(void){
 
 
 
-void waiting(){
+void waiting(void){
     /*
     
     fonction qui stop le programme temporairement pour laisser
@@ -36,7 +36,7 @@ void waiting(){
 }
 
 
-void is_there_room_around_you(){
+void is_there_room_around_you(void){
     FILE *element;
     list_char fichier_a_ouvrir;
     list_char buffer_fichier;
@@ -122,7 +122,7 @@ void is_there_room_around_you(){
 }
 
 
-void intro_reader(){
+void intro_reader(void){
     /*
     
     fonction qui lie les intros du monde actuelle
@@ -490,7 +490,7 @@ int fonction_deplacement(list_char * prompt){
     return 0;
 }
 
-void print_inventary(){
+void print_inventary(void){
     /*
     
     fonction qui affiche l'inventaire de l'utilisateur
