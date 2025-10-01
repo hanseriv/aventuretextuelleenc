@@ -4,6 +4,8 @@
 #include "fonctionutile.h"
 #include "game_function.h"
 #include "extended_game_function.h"
+#include "conversion.h"
+#include <time.h>
 
 list_string inventaire, objetdisponible, evenement;
 int position[] = {1,1};
@@ -188,7 +190,9 @@ int jeu(void){
 
 int main(void)
 {
+    srand(time(NULL));
     jeu();
+
     /*
     //The window we'll be rendering to
     SDL_Window* window = NULL;

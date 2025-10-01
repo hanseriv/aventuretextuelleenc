@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "fonctionutile.h"
 #include "extended_game_function.h"
+#include "conversion.h"
 #define colonne 90
 
 
@@ -476,6 +477,8 @@ int fonction_deplacement(list_char * prompt){
             oldposition[1] = position[1];
             rewind(element);
             description_reader(element);
+            rewind(element);
+            launch_attack_sequence(element);
         }
         else{
             position[0] = oldposition[0];

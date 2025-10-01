@@ -7,4 +7,8 @@ void ouvrir_coffre_ou_porte(list_char * prompt);
 
 void sauter_function(list_char * prompt);
 
+void attaque_function(void);
+
+void launch_attack_sequence(FILE * element);
+
 #endif

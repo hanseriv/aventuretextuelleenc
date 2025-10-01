@@ -1,4 +1,4 @@
-type room
+type combat
 description:
 il semblerait que cette piece soit hors du temps...
 vous sentez une presence...
@@ -41,6 +41,14 @@ END_OBJ
 
 eventobject:
 END_EVENT
+
+pnj:
+moi: 
+faite que sa cesse...
+faite que sa cesse...
+:
+END_PNJ
+
 
 conditionentre:
 END_COND

@@ -4,6 +4,7 @@
 #include "fonctionutile.h"
 #include "game_function.h"
 #include "extended_game_function.h"
+#include "conversion.h"
 
 
 
@@ -37,10 +38,11 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
         création du stream
     
     */
-    char buffer_lecture[10000];
-    char word_buf[100];
+    int random ; 
+    char buffer_lecture[10000] ="";
+    char word_buf[100]="";
     int compteur =0;
-   
+    int offset =0;
     FILE *element;
     list_char fichier_a_ouvrir;
     list_char buffer_fichier;
@@ -69,8 +71,7 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
     
     */
     element = fopen(fichier_a_ouvrir.content,"r");
-    free_liste_char(&buffer_fichier);
-    init_list_char(&buffer_fichier,"");
+    
     while(!is_word_in_string("ennemy",buffer_lecture)){
         fgets(buffer_lecture,10000,element);
     }
@@ -83,12 +84,14 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
                 compteur++;
             }
             word_buf[compteur]='\0';
-            append_charptr(&buffer_fichier,word_buf);
+            free_liste_char(&buffer_fichier);
+            init_list_char(&buffer_fichier,word_buf);
             append_str(&monster,&buffer_fichier);
         }
         fgets(buffer_lecture,10000,element);
     }
-    append_charptr(nom, monster.content[rand()%(monster.len-2)].content);
+    random =rand()%(monster.len-1);
+    append_charptr(nom, monster.content[random].content);
     free_liste_string(&monster);
     rewind(element);
     while(!is_word_in_string("ennemy",buffer_lecture)){
@@ -117,7 +120,26 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
         while(!is_word_in_string(nom->content,buffer_lecture)){
             fgets(buffer_lecture,10000,element);
         }
-        
+        offset = len_string(nom->content) +1;
+        compteur = 0;
+        while(buffer_lecture[offset + compteur]!= ' '){
+            word_buf[compteur] = buffer_lecture[offset + compteur];
+            compteur++;
+        }
+        word_buf[compteur] ='\0';
+        free_liste_char(&buffer_fichier);
+        init_list_char(&buffer_fichier,word_buf);
+        *pv_ennemi = string_to_int(buffer_fichier.content);
+        offset += compteur + 1;
+        compteur = 0;
+        while(buffer_lecture[offset + compteur]!= ' '){
+            word_buf[compteur] = buffer_lecture[offset + compteur];
+            compteur++;
+        }
+        word_buf[compteur] ='\0';
+        free_liste_char(&buffer_fichier);
+        init_list_char(&buffer_fichier,word_buf);
+        *att_enn= string_to_int(buffer_fichier.content);
     }
 
 
@@ -135,24 +157,15 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
 
 
 void attaque_function(void){
-    char prompt[2];
+    char prompt[4];
     int chance = 0;
     short end_combat = 0;
     int pv_enne;
     int att_enn;
     list_char nom_ennemi;
     init_list_char(&nom_ennemi,"");
-
+    
     get_monster(&pv_enne,&att_enn,&nom_ennemi);
-    srand(time(NULL));
-    
-    
-
-
-
-
-
-
     /*
     
     action joueur
@@ -163,11 +176,11 @@ void attaque_function(void){
     {
         printf("(1)attaquer (2)fuir\n");
         printf(":>");
-        fgets(prompt,1,stdin);
+        fgets(prompt,4,stdin);
     } while (prompt[0] != '1' && prompt[0] != '2');
     chance = rand()%100;
 
-    if(prompt[0] == '1'){
+    if(prompt[0] == '2'){
         
         if(chance < run_stat){
             end_combat ++;
@@ -195,7 +208,7 @@ void attaque_function(void){
     }
     printf("c'est au tour de %s...\n",nom_ennemi.content );
     chance = rand()%100;
-    if(pv_enne < 2){
+    if(pv_enne <= 2){
         printf("%s essaie de fuir\nla peur de mourir l'envahie...\n", nom_ennemi.content);
         if(chance < 20){
             printf("prenant ses jambes a son coup %s parvient a fuir vous laissant seul...\n", nom_ennemi.content);
@@ -217,6 +230,10 @@ void attaque_function(void){
             end_combat = 4;
         }
     }
+    if (end_combat != 0){
+        break;
+    }
+
 }
     free_liste_char(&nom_ennemi);
 
@@ -760,4 +777,14 @@ void print_pnj(FILE * streamfile){
 
 void shop(void){
 
+}
+
+
+void launch_attack_sequence(FILE * element){
+    char buffer[10000];
+    fgets(buffer,10000,element);
+    if (is_word_in_string("type combat",buffer)){
+        attaque_function();
+    }
+    rewind(element);
 }
