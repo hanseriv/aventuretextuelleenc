@@ -3,6 +3,7 @@
 #include "illustrator.h"
 #include "fonctionutile.h"
 #include "game_function.h"
+#include "extended_game_function.h"
 
 list_string inventaire, objetdisponible, evenement;
 int position[] = {1,1};

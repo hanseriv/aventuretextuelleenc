@@ -19,7 +19,7 @@ extern short victory;
 
 
 
-void monter_niveau(){
+void monter_niveau(void){
     att_stat *= 2;
     niveau_joueur ++;
     pv_joueur = 10;
@@ -28,7 +28,7 @@ void monter_niveau(){
 
 
 
-void attaque_function(){
+void attaque_function(void){
     srand(time(NULL));
     
 
@@ -571,6 +571,6 @@ void print_pnj(FILE * streamfile){
 }
 
 
-void shop(){
+void shop(void){
 
 }
