@@ -7,10 +7,12 @@
 
 
 
-int pv_joueur =10;
+int pv_joueur_max =10;
+int pv_joueur = 10; 
 int exp_joueur = 0;
 int niveau_joueur = 0;
-int att_stat = 2;
+int att = 2;
+int att_stat = 20;
 int run_stat =10;
 extern list_string inventaire, objetdisponible, evenement;
 extern int position[], oldposition[];
@@ -20,18 +22,203 @@ extern short victory;
 
 
 void monter_niveau(void){
-    att_stat *= 2;
+    att_stat += 2;
     niveau_joueur ++;
-    pv_joueur = 10;
+    pv_joueur_max += 1;
+    if (niveau_joueur%5 == 0){
+        att += 1;
+    }
     printf("avec tous ces combats vous avez gagne un niveau...\nbravo je suppose...\n");
+}
+
+void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
+    /*
+    
+        création du stream
+    
+    */
+    char buffer_lecture[10000];
+    char word_buf[100];
+    int compteur =0;
+   
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    list_char buffer_fichier;
+
+    list_string monster;
+    init_list_string(&monster);
+    
+    init_list_char(&buffer_fichier,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+
+
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    /*
+    
+        ouverture du stream
+    
+    */
+    element = fopen(fichier_a_ouvrir.content,"r");
+    free_liste_char(&buffer_fichier);
+    init_list_char(&buffer_fichier,"");
+    while(!is_word_in_string("ennemy",buffer_lecture)){
+        fgets(buffer_lecture,10000,element);
+    }
+    buffer_lecture[0] ='\0';
+    while(!is_word_in_string("END_ENNEMY",buffer_lecture)){
+        if(is_word_in_string(":",buffer_lecture) && buffer_lecture[0] != ':'){
+            compteur =0;
+            while(buffer_lecture[compteur]!= ':'){
+                word_buf[compteur] = buffer_lecture[compteur];
+                compteur++;
+            }
+            word_buf[compteur]='\0';
+            append_charptr(&buffer_fichier,word_buf);
+            append_str(&monster,&buffer_fichier);
+        }
+        fgets(buffer_lecture,10000,element);
+    }
+    append_charptr(nom, monster.content[rand()%(monster.len-2)].content);
+    free_liste_string(&monster);
+    rewind(element);
+    while(!is_word_in_string("ennemy",buffer_lecture)){
+        fgets(buffer_lecture,10000,element);
+    }
+    buffer_lecture[0] ='\0';
+    while(!is_word_in_string("END_ENNEMY",buffer_lecture)){
+        if(is_word_in_string(nom->content,buffer_lecture) && is_word_in_string(":",buffer_lecture)){
+            buffer_lecture[0]= '\0';
+            while(!is_word_in_string(":",buffer_lecture)){
+                printf("%s", buffer_lecture);
+                fgets(buffer_lecture,10000,element);
+            }
+            break;
+        }
+        fgets(buffer_lecture,10000,element);
+    }
+    fclose(element);
+    element = fopen("monster.monster","r");
+    if(element == NULL){
+        printf("unavailability of the monster bible...please make sure that all file were download or are in the same file...\n");
+        error = 1;
+    }
+    else{
+        buffer_lecture[0] ='\0';
+        while(!is_word_in_string(nom->content,buffer_lecture)){
+            fgets(buffer_lecture,10000,element);
+        }
+        
+    }
+
+
+    /*
+    
+    fermeture du stream...
+    
+    */
+    fclose(element);
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer_fichier);
 }
 
 
 
+
 void attaque_function(void){
+    char prompt[2];
+    int chance = 0;
+    short end_combat = 0;
+    int pv_enne;
+    int att_enn;
+    list_char nom_ennemi;
+    init_list_char(&nom_ennemi,"");
+
+    get_monster(&pv_enne,&att_enn,&nom_ennemi);
     srand(time(NULL));
     
+    
 
+
+
+
+
+
+    /*
+    
+    action joueur
+
+    */
+   while(1){
+    do
+    {
+        printf("(1)attaquer (2)fuir\n");
+        printf(":>");
+        fgets(prompt,1,stdin);
+    } while (prompt[0] != '1' && prompt[0] != '2');
+    chance = rand()%100;
+
+    if(prompt[0] == '1'){
+        
+        if(chance < run_stat){
+            end_combat ++;
+        }
+    } 
+    else{
+        if(chance < att_stat && chance>5){
+            printf("vous infligez %i dégat...\n",att);
+            pv_enne -= att;
+            
+        }
+        else if(chance <= 5){
+            printf("c\'est une attaque critique !!!\nvous infligez %i dégat...\n",2* att);
+            pv_enne -= 2* att;
+        }
+        else{
+            printf("votre attaque rate...\nvous infligez 0 dégat...\n");
+        }
+        if(pv_enne <= 0){
+            end_combat = 2;
+        }
+    }
+    if (end_combat != 0){
+        break;
+    }
+    printf("c'est au tour de %s...\n",nom_ennemi.content );
+    chance = rand()%100;
+    if(pv_enne < 2){
+        printf("%s essaie de fuir\nla peur de mourir l'envahie...\n", nom_ennemi.content);
+        if(chance < 20){
+            printf("prenant ses jambes a son coup %s parvient a fuir vous laissant seul...\n", nom_ennemi.content);
+            end_combat = 3;
+        }
+        else{
+            printf("malgres tous ces effort...l'effroi empeche %s de fuir\nil ne parvient pas a se resaisir pour fuir...\n", nom_ennemi.content);
+        }
+    }
+    else{
+        if(chance < -niveau_joueur >> 1){
+            printf("votre jour de chance n'est pas aujourd'hui...\n%s vous inflige %i dégats...\n", nom_ennemi.content, att_enn);
+            pv_joueur -= att_enn;
+        }
+        else{
+            printf("malgres tous ces effort...%s ne vous atteint pas\nla chance semble etre de votre cote...\n", nom_ennemi.content);
+        }
+        if(pv_joueur <= 0){
+            end_combat = 4;
+        }
+    }
+}
+    free_liste_char(&nom_ennemi);
 
 
     if (exp_joueur >= 100){

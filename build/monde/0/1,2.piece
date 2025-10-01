@@ -7,7 +7,7 @@ d'un pas pressant vous avancer mais...
 END_DESC
 
 
-ennemy: 2
+ennemy:
 lost_one: 
 vous voyez une ombre qui se place devant vous,
 elle n'a pas l'air menaçante...
