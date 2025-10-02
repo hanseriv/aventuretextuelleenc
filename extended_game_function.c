@@ -203,10 +203,10 @@ void END_reader(FILE * element, char * string_to_look){
         fgets(buffer,10000,element);
     }
     buffer[0] = '\0';
-    while(buffer[0]!=':'){
+    while(!is_word_in_string("END",buffer)){
+        printf("%s", buffer);
         fgets(buffer,10000,element);
     }
-    fclose(element);
 
 }
 
@@ -218,6 +218,7 @@ void attaque_function(void){
     int pv_enne;
     int att_enn;
     list_char nom_ennemi;
+    FILE * element_1;
     init_list_char(&nom_ennemi,"");
     
     get_monster(&pv_enne,&att_enn,&nom_ennemi);
@@ -291,8 +292,35 @@ void attaque_function(void){
 
 }
     free_liste_char(&nom_ennemi);
+    
+    element_1 = open_currentfile();
 
 
+
+
+    switch (end_combat)
+    {
+    case 2:
+        END_reader(element_1,"VICTORY:");
+        exp_joueur += 10;
+        break;
+    case 1:
+        END_reader(element_1,"FUITE:");
+        break;
+    case 4:
+        victory = -1;
+        break;
+    
+    case 3:
+        END_reader(element_1,"VICTORY:");
+        exp_joueur += 5;
+        break;
+    
+    default:
+        printf("unsupected error while fighting\nplease report to the main programmer...\n");
+        break;
+    }
+    fclose(element_1);
     if (exp_joueur >= 100){
         exp_joueur = 0;
         monter_niveau();

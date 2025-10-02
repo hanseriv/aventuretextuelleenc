@@ -155,8 +155,13 @@ int jeu(void){
         }
 
 
-        if(victory !=0 ){
+        if(victory == 1 ){
             printf("voici la fin de votre experience...\nen esperant que tout ce soit bien passer...\n");
+            break;
+        }
+
+        if(victory == -1){
+            printf("paisiblement vous vous reposez...\ncela n'était pas le repos que vous attendiez...\nmais ce n'est pas comme si vous aviez le choix...\nainsi ce termine votre aventure\n");
             break;
         }
 
