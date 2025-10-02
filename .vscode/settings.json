@@ -3,6 +3,7 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "illustrator.h": "c",
-        "extended_game_function.h": "c"
+        "extended_game_function.h": "c",
+        "conversion.h": "c"
     }
 }

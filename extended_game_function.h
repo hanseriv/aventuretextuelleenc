@@ -11,4 +11,6 @@ void attaque_function(void);
 
 void launch_attack_sequence(FILE * element);
 
+FILE * open_currentfile(void);
+
 #endif

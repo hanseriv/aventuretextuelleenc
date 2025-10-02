@@ -13,7 +13,7 @@ int pv_joueur = 10;
 int exp_joueur = 0;
 int niveau_joueur = 0;
 int att = 2;
-int att_stat = 20;
+int att_stat = 30;
 int run_stat =10;
 extern list_string inventaire, objetdisponible, evenement;
 extern int position[], oldposition[];
@@ -129,16 +129,20 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
         word_buf[compteur] ='\0';
         free_liste_char(&buffer_fichier);
         init_list_char(&buffer_fichier,word_buf);
+        printf("%s\n", buffer_fichier.content);
+        printf("%i\n",string_to_int(buffer_fichier.content));
         *pv_ennemi = string_to_int(buffer_fichier.content);
         offset += compteur + 1;
         compteur = 0;
-        while(buffer_lecture[offset + compteur]!= ' '){
+        while(buffer_lecture[offset + compteur]!= ':'){
             word_buf[compteur] = buffer_lecture[offset + compteur];
             compteur++;
         }
         word_buf[compteur] ='\0';
         free_liste_char(&buffer_fichier);
         init_list_char(&buffer_fichier,word_buf);
+        printf("%s\n", buffer_fichier.content);
+        printf("%i\n",string_to_int(buffer_fichier.content));
         *att_enn= string_to_int(buffer_fichier.content);
     }
 
@@ -153,7 +157,58 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
     free_liste_char(&buffer_fichier);
 }
 
+FILE * open_currentfile(void){
+    FILE *element;
+    list_char fichier_a_ouvrir;
+    list_char buffer_fichier;
 
+    /*
+    
+        création du stream
+    
+    */
+    init_list_char(&buffer_fichier,"");
+    init_list_char(&fichier_a_ouvrir, "monde/");
+
+
+    int_translator(&buffer_fichier,world);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,'/');
+
+    int_translator(&buffer_fichier,position[0]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_char(&fichier_a_ouvrir,',');
+
+    int_translator(&buffer_fichier,position[1]);
+    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
+    append_charptr(&fichier_a_ouvrir, ".piece");
+    /*
+    
+        ouverture du stream
+    
+    */
+    element = fopen(fichier_a_ouvrir.content,"r");
+    free_liste_char(&fichier_a_ouvrir);
+    free_liste_char(&buffer_fichier);
+    return element;
+}
+
+
+
+
+void END_reader(FILE * element, char * string_to_look){
+    char buffer[10000] = "";
+    rewind(element);
+    while(!is_word_in_string(string_to_look,buffer)){
+        fgets(buffer,10000,element);
+    }
+    buffer[0] = '\0';
+    while(buffer[0]!=':'){
+        fgets(buffer,10000,element);
+    }
+    fclose(element);
+
+}
 
 
 void attaque_function(void){
@@ -219,7 +274,7 @@ void attaque_function(void){
         }
     }
     else{
-        if(chance < -niveau_joueur >> 1){
+        if(chance <= 20 + ((niveau_joueur +10 )>> 1)){
             printf("votre jour de chance n'est pas aujourd'hui...\n%s vous inflige %i dégats...\n", nom_ennemi.content, att_enn);
             pv_joueur -= att_enn;
         }
@@ -244,6 +299,8 @@ void attaque_function(void){
     }
     
 }
+
+
 
 void sauter_function(list_char * prompt){
     char buffer[10000] = "\0";
@@ -295,7 +352,7 @@ void sauter_function(list_char * prompt){
     }
     buffer[0] ='\0';
 
-    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if (is_word_in_string(":",buffer) == True_statement){
             compteur = 0;
             while(buffer[compteur] !=':'){
@@ -542,7 +599,7 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
     }
     buffer[0] ='\0';
 
-    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if (is_word_in_string(":",buffer) == True_statement){
             compteur = 0;
             while(buffer[compteur] !=':'){
@@ -749,7 +806,7 @@ void print_pnj(FILE * streamfile){
     }
     buffer[0] = '\0';
     printf("dans la pièce il y a :\n");
-    while(is_word_in_string("END_PNJ",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
 

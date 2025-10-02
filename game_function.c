@@ -174,7 +174,7 @@ void description_reader(FILE * streamfile){
     
 
     buffer[0] = '\0';
-    while(is_word_in_string("END_DESC",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         
         printf("%s",buffer);
         
@@ -193,7 +193,7 @@ void print_object(FILE * streamfile){
     }
     buffer[0] = '\0';
     printf("dans la pièce il y a :\n");
-    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
 
@@ -266,7 +266,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
     on lie chaque ligne jusqu'a la balise END_OBJ pour vérifier s'il y a l'objet 
     
     */
-    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
             compteur = 0;
@@ -288,7 +288,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
                 found = 1;
                 break;
             }
-            else if(is_a_string_in_list_string(word_inter,&inventaire)) {
+            else if(is_a_string_in_list_string(word_inter,&inventaire)&& is_word_in_string(word_inter,prompt->content) == True_statement) {
                 found =1;
                 printf("j\'ai déjà pris cet objet...\n");
                 break;
@@ -306,6 +306,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
     on se place jusqu'a la balise eventobject
     
     */
+    rewind(streamfile);
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
         fgets(buffer, 10000,streamfile);
@@ -316,7 +317,7 @@ void print_object_description(FILE * streamfile,list_char * prompt){
     
     */
     buffer[0] = '\0';
-    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
             compteur = 0;
@@ -403,7 +404,7 @@ int can_i_enter(FILE * filestream){
         fgets(buffer,10000,filestream);
     }
     buffer[0] ='\0';
-    while(is_word_in_string("END_COND", buffer) == False_statement){
+    while(is_word_in_string("END", buffer) == False_statement){
 
         if(buffer[0] !='\0'){
             buffer[len_string(buffer)-2]= '\0';
@@ -428,8 +429,7 @@ int fonction_deplacement(list_char * prompt){
 
     */
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer;
+
 
     if (is_word_in_string("nord",prompt->content)){
         position[0] ++;
@@ -451,21 +451,8 @@ int fonction_deplacement(list_char * prompt){
         on ouvre le fichier du niveau correspondant
     */
     
-    init_list_char(&buffer,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-    int_translator(&buffer,world);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,'/');
-    int_translator(&buffer,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,',');
-    int_translator(&buffer,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    /*
-        fin de la retranscrisption du niveau 
-    */
-    element = fopen(fichier_a_ouvrir.content,"r");
+    element =open_currentfile();
+
     if(element == NULL){
         printf("je ne pense pas pouvoir passer a travers l'univers lui-meme...\n");
         position[0] = oldposition[0];
@@ -489,8 +476,7 @@ int fonction_deplacement(list_char * prompt){
         
 
     }
-    free_liste_char(&buffer);
-    free_liste_char(&fichier_a_ouvrir);
+
     return 0;
 }
 
@@ -529,7 +515,7 @@ void took(FILE * streamfile, list_char * prompt){
         fgets(buffer, 10000,streamfile);
     }
     buffer[0] = '\0';
-    while(is_word_in_string("END_OBJ",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
             compteur = 0;
@@ -596,20 +582,7 @@ void fonction_prendre(list_char * prompt){
     */
 
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer;
-    init_list_char(&buffer,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-    int_translator(&buffer,world);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,'/');
-    int_translator(&buffer,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,',');
-    int_translator(&buffer,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    element = fopen(fichier_a_ouvrir.content,"r");
+    element = open_currentfile();
     if(element == NULL){
         printf("cannot open the file...please contact the programming team...\n");
         error = 1;
@@ -618,8 +591,6 @@ void fonction_prendre(list_char * prompt){
         took(element,prompt);
         fclose(element);
     }
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer);
 }
 
 
@@ -637,21 +608,9 @@ void fonction_regarder(list_char * prompt){
     */
 
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer;
-    
-    init_list_char(&buffer,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-    int_translator(&buffer,world);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,'/');
-    int_translator(&buffer,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_char(&fichier_a_ouvrir,',');
-    int_translator(&buffer,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    element = fopen(fichier_a_ouvrir.content,"r");
+
+
+    element = open_currentfile();
 
     if(element == NULL){
         printf("impossible to open the said file...\n");
@@ -680,8 +639,6 @@ void fonction_regarder(list_char * prompt){
     }
 
     fclose(element);
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer);
 
 }
 
@@ -695,22 +652,7 @@ void fonction_parler(list_char * prompt){
 
     int found = 0;
   
-    FILE *element;
-    list_char fichier_a_ouvrir;
-
-    list_char buffer_fichier;
-    init_list_char(&buffer_fichier,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-    int_translator(&buffer_fichier,world);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,'/');
-    int_translator(&buffer_fichier,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,',');
-    int_translator(&buffer_fichier,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    element = fopen(fichier_a_ouvrir.content,"r");
+    FILE *element =open_currentfile();
 
     if(element == NULL){
         printf("impossible to open the said file...\n");
@@ -726,7 +668,7 @@ void fonction_parler(list_char * prompt){
     on lie chaque ligne jusqu'a la balise END_OBJ pour vérifier s'il y a l'objet 
     
     */
-    while(is_word_in_string("END_PNJ",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if(is_word_in_string(":",buffer) && buffer[0] !=':'){
 
             compteur = 0;
@@ -763,8 +705,6 @@ void fonction_parler(list_char * prompt){
     }
     fclose(element);
     }
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer_fichier);
 }
 
 
@@ -778,10 +718,8 @@ void fonction_utiliser(list_char * prompt){
     int compteur_chariot =0;
     int found = 0;
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer_fichier;
     list_char event;
-
+    init_list_char(&event,"");
 
     while (compteur != (int)inventaire.len){
         if(is_word_in_string(inventaire.content[compteur].content,prompt->content) && inventaire.content[compteur].content[0] != '\0'){
@@ -797,29 +735,12 @@ void fonction_utiliser(list_char * prompt){
     */
    if(found == 1){
     found = 0;
-    
-    init_list_char(&event,"");
-    init_list_char(&buffer_fichier,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-
-
-    int_translator(&buffer_fichier,world);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,'/');
-
-    int_translator(&buffer_fichier,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,',');
-
-    int_translator(&buffer_fichier,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
     /*
     
         ouverture du stream
     
     */
-    element = fopen(fichier_a_ouvrir.content,"r");
+    element = open_currentfile();
 
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
@@ -827,7 +748,7 @@ void fonction_utiliser(list_char * prompt){
     }
     buffer[0] ='\0';
 
-    while(is_word_in_string("END_EVENT",buffer) == False_statement){
+    while(is_word_in_string("END",buffer) == False_statement){
         if (is_word_in_string(":",buffer) == True_statement){
             compteur = 0;
             while(buffer[compteur] !=':'){
@@ -1018,8 +939,6 @@ void fonction_utiliser(list_char * prompt){
     
 
     fclose(element);
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer_fichier);
     free_liste_char(&event);
     }
     else{
