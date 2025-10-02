@@ -311,40 +311,12 @@ void sauter_function(list_char * prompt){
     int compteur_chariot =0;
     int found = 0;
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer_fichier;
     list_char event;
-
-    /*
-    
-        création du stream
-    
-    */
    
-   
+    element = open_currentfile();
     
     init_list_char(&event,"");
-    init_list_char(&buffer_fichier,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
 
-
-    int_translator(&buffer_fichier,world);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,'/');
-
-    int_translator(&buffer_fichier,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,',');
-
-    int_translator(&buffer_fichier,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    /*
-    
-        ouverture du stream
-    
-    */
-    element = fopen(fichier_a_ouvrir.content,"r");
 
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
@@ -362,7 +334,7 @@ void sauter_function(list_char * prompt){
 
             word_inter[compteur] = '\0';
             /*printf("l'element trouvé est : %s", word_inter);*/
-            if (is_the_char_ptr_shwoing_the_samething(word_inter,"sauter")){
+            if (is_word_in_string(word_inter, prompt->content)){
                 /*
                 
                     on a trouver l'objet on vérifie que l'objet utiliser est le bon 
@@ -378,7 +350,7 @@ void sauter_function(list_char * prompt){
                 }
                 word_inter[compteur] = '\0';
                 /*printf("l'objet a utilisé est : %s", word_inter);*/
-                if (is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == False_statement){
+                if (is_the_char_ptr_shwoing_the_samething(word_inter,"sauter") && is_a_string_in_list_string(buffer,&evenement) == False_statement){
                     /*
                     
                     condition remplis donc on affiche la description si on a bien utiliser le bon objet
@@ -469,7 +441,7 @@ void sauter_function(list_char * prompt){
                     break;
 
                 }
-                else if(is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == True_statement){
+                else if(is_the_char_ptr_shwoing_the_samething(word_inter,"sauter") && is_a_string_in_list_string(buffer,&evenement) == True_statement){
                     /*
                     
                     si on utilise le bon objet mais l'on a déjà fais l'event...
@@ -543,8 +515,7 @@ void sauter_function(list_char * prompt){
     
 
     fclose(element);
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer_fichier);
+
     free_liste_char(&event);
 }
 
@@ -558,40 +529,10 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
     int compteur_chariot =0;
     int found = 0;
     FILE *element;
-    list_char fichier_a_ouvrir;
-    list_char buffer_fichier;
+
     list_char event;
-
-    /*
-    
-        création du stream
-    
-    */
-   
-   
-    
     init_list_char(&event,"");
-    init_list_char(&buffer_fichier,"");
-    init_list_char(&fichier_a_ouvrir, "monde/");
-
-
-    int_translator(&buffer_fichier,world);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,'/');
-
-    int_translator(&buffer_fichier,position[0]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_char(&fichier_a_ouvrir,',');
-
-    int_translator(&buffer_fichier,position[1]);
-    append_charptr(&fichier_a_ouvrir, buffer_fichier.content);
-    append_charptr(&fichier_a_ouvrir, ".piece");
-    /*
-    
-        ouverture du stream
-    
-    */
-    element = fopen(fichier_a_ouvrir.content,"r");
+    element = open_currentfile();
 
 
     while(is_word_in_string("eventobject",buffer) == False_statement){
@@ -609,7 +550,7 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
 
             word_inter[compteur] = '\0';
             /*printf("l'element trouvé est : %s", word_inter);*/
-            if (is_the_char_ptr_shwoing_the_samething(word_inter,"ouvrir")){
+            if (is_word_in_string(word_inter, prompt->content)){
                 /*
                 
                     on a trouver l'objet on vérifie que l'objet utiliser est le bon 
@@ -625,7 +566,7 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
                 }
                 word_inter[compteur] = '\0';
                 /*printf("l'objet a utilisé est : %s", word_inter);*/
-                if (is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == False_statement){
+                if (is_the_char_ptr_shwoing_the_samething(word_inter,"ouvrir") && is_a_string_in_list_string(buffer,&evenement) == False_statement){
                     /*
                     
                     condition remplis donc on affiche la description si on a bien utiliser le bon objet
@@ -716,7 +657,7 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
                     break;
 
                 }
-                else if(is_word_in_string(word_inter, prompt->content) && is_a_string_in_list_string(buffer,&evenement) == True_statement){
+                else if(is_the_char_ptr_shwoing_the_samething(word_inter,"ouvrir")  && is_a_string_in_list_string(buffer,&evenement) == True_statement){
                     /*
                     
                     si on utilise le bon objet mais l'on a déjà fais l'event...
@@ -790,8 +731,6 @@ void ouvrir_coffre_ou_porte(list_char * prompt){
     
 
     fclose(element);
-    free_liste_char(&fichier_a_ouvrir);
-    free_liste_char(&buffer_fichier);
     free_liste_char(&event);
 }
 
