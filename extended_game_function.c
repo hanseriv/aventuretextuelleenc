@@ -129,8 +129,6 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
         word_buf[compteur] ='\0';
         free_liste_char(&buffer_fichier);
         init_list_char(&buffer_fichier,word_buf);
-        printf("%s\n", buffer_fichier.content);
-        printf("%i\n",string_to_int(buffer_fichier.content));
         *pv_ennemi = string_to_int(buffer_fichier.content);
         offset += compteur + 1;
         compteur = 0;
@@ -141,8 +139,6 @@ void get_monster(int *pv_ennemi,int* att_enn, list_char * nom ){
         word_buf[compteur] ='\0';
         free_liste_char(&buffer_fichier);
         init_list_char(&buffer_fichier,word_buf);
-        printf("%s\n", buffer_fichier.content);
-        printf("%i\n",string_to_int(buffer_fichier.content));
         *att_enn= string_to_int(buffer_fichier.content);
     }
 
