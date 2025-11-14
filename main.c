@@ -5,6 +5,7 @@
 #include "game_function.h"
 #include "extended_game_function.h"
 #include "conversion.h"
+#include "tutoriel_fonction.h"
 #include <time.h>
 
 list_string inventaire, objetdisponible, evenement;
@@ -69,10 +70,10 @@ int jeu(void){
         }
         printf(":>");
         input(&prompt);
-        
-
-        
-        if(is_word_in_string("aller",prompt.content))        
+        if(is_word_in_string("help",prompt.content)){
+            tutoriel();
+        }
+        else if(is_word_in_string("aller",prompt.content))        
         {
             /*
             

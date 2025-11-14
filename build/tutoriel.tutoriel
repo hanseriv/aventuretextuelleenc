@@ -1,0 +1,26 @@
+dans ce jeu vous serez ammener a taper des instructions dans le terminal...
+voici un guide des commandes que vous pouvez taper...
+la méthode de reconnaissance des commandes n'est pas très évolué.
+Elle requiert que vous tapiez des mot précis...
+l'ordre n'a pas d'importance mais vos mot si....
+la taille des commande n'est défini et peut donc être aussi longue que vous le souhaitez.
+mais plus elle sera longu moins vous aurez de chance quelle soit reconnu correctement...
+voila les commandes disponible :
+
+-regarder/inspecter <- permet de regarder objet/piece present dans la piece.
+si vous y ajouter l'argument autour vous pourrez connaitre les piece ou vous pouvez aller.
+
+-prendre + objet_a_prendre <- permet de récuperer l'objet désigner
+
+-aller + direction_cardinal <- permet de se déplacer dans les piece autour de soi
+
+-utiliser objet1 objet2 <- permet d'utiliser un objet sur un autre 
+
+-ouvrir objet_1 <- permet de faire l'action ouvrir sur l'objet selectionner
+
+-sauter objet_1 <- permet de faire l'action sur l'objet choisit
+
+-parler pnj_1 <- permet de parler avec un pnj
+
+voila n'hesiter pas a tester les différentes commandes
+et bonne chance dans cette aventure...

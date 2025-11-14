@@ -2,6 +2,7 @@
 #define GAME_FUNCTION_H_INCLUDED
 #define colonne 90
 
+#include "fonctionutile.h"
 
 void waiting(void);
 void clear_func(void);
